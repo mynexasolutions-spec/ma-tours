@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}{{ 'Edit' if mode == 'edit' else 'Add' }} FAQ{% endblock %}
+{% block page_subtitle %}Manage Frequently Asked Questions{% endblock %}
+
+{% block content %}
+<div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+    <a href="{{ url_for('admin.faqs_list') }}" class="hover:text-primary-600 transition-colors">FAQs</a>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-gray-800 font-medium">{{ 'Edit' if mode == 'edit' else 'Add New' }}</span>
+</div>
+
+<form method="POST" class="max-w-2xl">
+    <div class="admin-card">
+        <div class="admin-card-header"><h2 class="admin-card-title">Question Details</h2></div>
+        <div class="p-6 space-y-5">
+            <div class="form-group">
+                <label for="question" class="form-label">Question <span class="text-red-500">*</span></label>
+                <input type="text" id="question" name="question" required class="form-input"
+                       placeholder="e.g. Do I need a visa to travel?"
+                       value="{{ faq.question if mode == 'edit' else request.form.get('question', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="answer" class="form-label">Answer <span class="text-red-500">*</span></label>
+                <textarea id="answer" name="answer" required rows="5" class="form-input form-textarea"
+                          placeholder="Provide the detailed answer here...">{{ faq.answer if mode == 'edit' else request.form.get('answer', '') }}</textarea>
+            </div>
+
+            <!-- Package selection -->
+            <div class="mb-4">
+                <label for="package_id" class="block text-sm font-medium text-gray-700">Related Package (Optional)</label>
+                <select name="package_id" id="package_id" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-accent focus:border-accent sm:text-sm">
+                    <option value="">-- Global FAQ (Shows on Homepage) --</option>
+                    {% for p in packages %}
+                        <option value="{{ p.id }}" {% if faq and faq.package_id == p.id %}selected{% endif %}>{{ p.title }}</option>
+                    {% endfor %}
+                </select>
+                <p class="mt-1 text-sm text-gray-500">If selected, this FAQ will only appear on that package's page.</p>
+            </div>
+
+            <!-- Active Status -->
+            <div class="mb-6 flex items-center">
+                <input type="checkbox" id="is_active" name="is_active" class="h-4 w-4 text-accent focus:ring-accent border-gray-300 rounded"
+                       {% if mode == 'add' or (faq and faq.is_active) %}checked{% endif %}>
+                <label for="is_active" class="ml-2 block text-sm text-gray-900">
+                    Active (visible on website)
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-3 mt-6">
+        <button type="submit" class="admin-btn admin-btn-primary">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            {{ 'Update FAQ' if mode == 'edit' else 'Create FAQ' }}
+        </button>
+        <a href="{{ url_for('admin.faqs_list') }}" class="admin-btn admin-btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

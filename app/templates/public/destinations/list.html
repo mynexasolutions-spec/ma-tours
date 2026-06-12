@@ -1,0 +1,62 @@
+{% extends "public/base.html" %}
+
+{% set is_transparent_nav = True %}
+
+{% block title %}M.A. Tours | Destinations{% endblock %}
+
+{% block content %}
+<!-- Hero Header -->
+<div class="relative bg-gray-900 py-24 sm:py-32 overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=2074" alt="Destinations Background" class="w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-serif text-white mb-6">Our Destinations</h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">Discover beautiful places we travel to and find your next perfect getaway.</p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    {% if destinations %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for dest in destinations %}
+        <a href="{{ url_for('public.destination_detail', slug=dest.slug) }}" class="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="relative h-64 overflow-hidden bg-gray-100">
+                {% if dest.hero_image_url %}
+                <img src="{{ dest.hero_image_url }}" alt="{{ dest.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                {% else %}
+                <div class="absolute inset-0 flex items-center justify-center text-gray-300">
+                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                </div>
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <h2 class="text-2xl font-bold text-white mb-1">{{ dest.name }}</h2>
+                    <p class="text-gray-300 text-sm flex items-center gap-2">
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-primary-500"></span>
+                        {{ dest.packages.filter_by(is_active=True).count() }} Packages
+                    </p>
+                </div>
+            </div>
+            {% if dest.description %}
+            <div class="p-6">
+                <p class="text-gray-600 line-clamp-2 text-sm">{{ dest.description }}</p>
+                <div class="mt-4 flex items-center text-primary-600 text-sm font-semibold group-hover:text-primary-700">
+                    Explore Destination
+                    <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </div>
+            </div>
+            {% endif %}
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">No Destinations Found</h3>
+        <p class="text-gray-500">Check back later for exciting new places to visit.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Gallery Categories{% endblock %}
+{% block page_subtitle %}Manage image gallery sections{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- LEFT: List Categories (2/3) -->
+    <div class="lg:col-span-2">
+        <div class="admin-card">
+            {% if categories %}
+            <div class="overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Category Name</th>
+                            <th>Images</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cat in categories %}
+                        <tr>
+                            <td>
+                                <span class="font-semibold text-gray-800">{{ cat.name }}</span>
+                                <p class="text-xs text-gray-400 mt-0.5">/gallery/{{ cat.slug }}</p>
+                            </td>
+                            <td>
+                                <span class="text-sm text-gray-600">{{ cat.images.count() }} image(s)</span>
+                            </td>
+                            <td class="text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ url_for('admin.gallery_category', id=cat.id) }}" class="admin-btn admin-btn-secondary py-1 px-3 text-xs" title="Manage Images">
+                                        Manage Images
+                                    </a>
+                                    <form action="{{ url_for('admin.gallery_category_delete', id=cat.id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this category and all its images?');">
+                                        <button type="submit" class="admin-btn-icon text-red-500 hover:text-red-700 hover:bg-red-50" title="Delete Category">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto">
+                    <svg class="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <p class="text-gray-500 mt-4 font-medium">No gallery categories yet</p>
+                <p class="text-gray-400 text-sm mt-1">Create a category to start uploading images.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- RIGHT: Add Category (1/3) -->
+    <div>
+        <div class="admin-card">
+            <div class="admin-card-header"><h2 class="admin-card-title">Add Category</h2></div>
+            <div class="p-6">
+                <form method="POST" action="{{ url_for('admin.gallery_list') }}" class="space-y-4">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Category Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" required class="form-input" placeholder="e.g. Kashmir Winter">
+                        <p class="form-hint mt-1">Slug is auto-generated.</p>
+                    </div>
+                    <button type="submit" class="admin-btn admin-btn-primary w-full justify-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        Create Category
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

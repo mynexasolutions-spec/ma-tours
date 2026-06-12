@@ -1,0 +1,326 @@
+Milestone 1 — Project Foundation & Database
+
+Goal: Create the project's backbone.
+
+Tasks:
+    Initialize Flask project
+    Configure Supabase PostgreSQL connection
+    Setup SQLAlchemy
+    Setup Alembic migrations
+    Create all database models
+    Run migrations
+    Seed initial categories
+
+Tables:
+    admins
+    destinations
+    categories
+    packages
+    package_categories
+    package_images
+    package_highlights
+    package_inclusions
+    package_exclusions
+    package_itinerary
+    inquiries
+    testimonials
+    faqs
+    gallery_categories
+    gallery_images
+    hero_slides
+    announcements
+    site_settings
+
+Deliverable: Database fully operational.
+
+
+
+Milestone 2 — Authentication & Admin Layout
+Goal: Secure admin area.
+
+Tasks
+    Admin login
+    Logout
+    Password hashing
+    Protected routes
+    Admin sidebar layout
+    Dashboard shell
+
+Admin Navigation:
+    Dashboard
+    Packages
+    Destinations
+    Hero Slides
+    Gallery
+    Testimonials
+    FAQs
+    Inquiries
+    Settings
+
+Deliverable: Admin can log in and access dashboard.
+
+
+
+Milestone 3 — Destinations Management
+Goal: Create destination CRUD.
+
+Tasks
+    List destinations
+    Add destination
+    Edit destination
+    Activate/deactivate destination
+
+Fields:
+    Name
+    Slug
+    Description
+    Hero Image
+
+Deliverable: Destinations manageable.
+
+
+
+Milestone 4 — Package Management
+This is the largest milestone.
+
+Goal: Complete package CRUD.
+
+Tasks
+
+    Create package:
+        Title
+        Destination
+        Categories
+        Price
+        Duration
+        Description
+        Featured
+        Active
+        SEO fields
+
+    Manage:
+        Highlights
+        Inclusions
+        Exclusions
+        Itinerary
+        Images
+
+Cloudinary integration.
+
+Deliverable: Admin can fully manage packages.
+
+
+
+Milestone 5 — Homepage Content Management
+Goal: Make homepage dynamic.
+
+Tasks
+
+    Hero Slides CRUD
+
+    Announcement CRUD
+
+    Featured Package selection
+
+Deliverable: Homepage content manageable.
+
+
+
+Milestone 6 — Gallery Management
+Goal: Admin manages gallery.
+
+Tasks
+    Gallery categories
+    Upload images
+    Delete images
+    Reorder images
+
+Deliverable: Gallery complete.
+
+
+
+Milestone 7 — Testimonials & FAQs
+Goal: Social proof and support content.
+
+Tasks
+    Testimonials CRUD
+    FAQs CRUD
+    Feature/unfeature testimonials
+    Ordering support
+
+Deliverable: Testimonials and FAQs manageable.
+
+
+
+Milestone 8 — Inquiry Management (Mini CRM)
+Goal: Handle leads.
+
+Tasks
+    Store inquiries
+    Inquiry listing
+    Inquiry detail page
+    Status updates
+    Admin notes
+
+Filters:
+    New
+    Contacted
+    Interested
+    Booked
+    Closed
+
+Deliverable: Lead management working.
+
+
+
+
+Milestone 9 — Public Website Foundation
+Goal: Create frontend shell.
+
+Pages:
+    Home
+    About
+    Packages
+    Package Detail
+    Services
+    Gallery
+    Contact
+    Privacy Policy
+    Terms
+
+Responsive layout.
+
+Navbar.
+
+Footer.
+
+Deliverable: All public routes exist.
+
+
+
+Milestone 10 — Homepage
+Goal: Connect homepage to admin data.
+
+Sections:
+    Hero Slider
+    Featured Packages
+    Popular Destinations
+    Services
+    Why Choose Us
+    Testimonials
+    Gallery Preview
+    FAQs
+    Inquiry Form
+
+Deliverable: Homepage complete.
+
+
+
+
+Milestone 11 — Package Pages
+Goal: Core user journey.
+
+Tasks
+Package listing
+
+Filters:
+    Category
+    Destination
+
+Package detail page
+
+Related packages
+
+Inquiry form
+
+WhatsApp CTA
+
+Deliverable: Packages fully browsable.
+
+
+
+
+Milestone 12 — Remaining Pages
+Goal: Finish marketing pages.
+
+Pages:
+    About
+    Services
+    Gallery
+    Contact
+    Privacy Policy
+    Terms
+
+Deliverable: Website feature complete.
+
+
+
+
+Milestone 13 — WhatsApp Integration
+Goal: Increase conversions.
+
+Tasks
+    Floating WhatsApp button
+    Package-specific WhatsApp links
+    Pre-filled messages
+
+Deliverable: WhatsApp lead flow working.
+
+
+
+
+Milestone 14 — SEO & Performance
+Goal: Production readiness.
+
+Tasks
+Meta tags
+    Sitemap.xml
+    Robots.txt
+    Open Graph tags
+    Clean URLs
+    Image optimization
+    Lazy loading
+
+Deliverable: SEO-ready site.
+
+
+
+Milestone 15 — Deployment & Content Population
+Goal: Launch.
+
+Tasks
+    Deploy backend
+    Configure domain
+    Upload real packages
+    Upload gallery
+    Upload hero slides
+    Create FAQs
+    Create testimonials
+    Final testing
+
+Deliverable: Live website.
+
+
+
+
+
+
+
+# summary phases
+
+Phase 1
+Database + Auth
+
+Phase 2
+Admin CMS
+(Destinations, Packages, Gallery, FAQs, Testimonials)
+
+Phase 3
+Lead Management
+(Inquiries)
+
+Phase 4
+Public Website
+
+Phase 5
+SEO + Deployment

@@ -1,0 +1,103 @@
+<style>
+/* Guaranteed Solid Background on Scroll */
+.nav-scrolled {
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Mobile Menu Slide Animation */
+.slide-enter-active, .slide-leave-active {
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    overflow: hidden;
+}
+.slide-enter-from, .slide-leave-to {
+    max-height: 0;
+    opacity: 0;
+}
+.slide-enter-to, .slide-leave-from {
+    max-height: 400px;
+    opacity: 1;
+}
+</style>
+
+<!-- Header Wrapper (Includes Announcement + Navbar) -->
+<div id="navbar-app">
+<header class="fixed top-0 w-full z-50 flex flex-col transition-all duration-300"
+        :class="{'nav-scrolled': isScrolled, 'bg-transparent': !isScrolled}">
+    
+    <!-- Announcement Bar -->
+    {% if announcement %}
+    <div v-show="!isScrolled" class="bg-primary-600 text-white text-xs sm:text-sm font-medium py-2 px-4 text-center w-full transition-all duration-300">
+        <span>{{ announcement.text }}</span>
+        {% if announcement.link %}
+        <a href="{{ announcement.link }}" class="underline ml-2 hover:text-primary-100 transition-colors">Learn More</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Navigation Bar -->
+    <nav class="w-full transition-all duration-300" :class="{'py-3': isScrolled, 'py-5': !isScrolled}">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="{{ url_for('public.home') }}" class="flex items-center gap-2">
+                    <svg class="w-8 h-8" :class="{'text-primary-600': isScrolled || !isTransparentPage, 'text-white': !isScrolled && isTransparentPage}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 4.5l5.5 11h-11L12 6.5z"/></svg>
+                    <span class="font-serif font-bold text-xl tracking-tight" :class="{'text-gray-900': isScrolled || !isTransparentPage, 'text-white': !isScrolled && isTransparentPage}">M.A. Tours</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{{ url_for('public.home') }}" class="text-sm font-medium transition-colors hover:text-primary-500" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">Home</a>
+                    <a href="{{ url_for('public.destinations_list') }}" class="text-sm font-medium transition-colors hover:text-primary-500" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">Destinations</a>
+                    <a href="{{ url_for('public.packages_list') }}" class="text-sm font-medium transition-colors hover:text-primary-500" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">Packages</a>
+                    <a href="{{ url_for('public.activities_list') }}" class="text-sm font-medium transition-colors hover:text-primary-500" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">Activities</a>
+                    <a href="{{ url_for('public.gallery') }}" class="text-sm font-medium transition-colors hover:text-primary-500" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">Gallery</a>
+                    <a href="{{ url_for('public.about') }}" class="text-sm font-medium transition-colors hover:text-primary-500" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">About</a>
+                    <a href="{{ url_for('public.contact') }}" class="text-sm font-medium transition-colors hover:text-primary-500" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">Contact</a>
+                    
+                    <!-- Search Mock Icon -->
+                    <button class="text-sm font-medium transition-colors hover:text-primary-500 flex items-center" :class="{'text-gray-600': isScrolled || !isTransparentPage, 'text-white/90': !isScrolled && isTransparentPage}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </button>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="hidden md:flex">
+                    <a href="{{ url_for('public.home') }}#inquiry-app" class="btn px-6 py-2.5 text-sm font-semibold rounded-full shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" 
+                       :class="{'bg-primary-600 text-white hover:bg-primary-700': isScrolled || !isTransparentPage, 'bg-white text-gray-900 hover:bg-gray-50': !isScrolled && isTransparentPage}">
+                        Plan Trip
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="focus:outline-none" :class="{'text-gray-800': isScrolled || !isTransparentPage, 'text-white': !isScrolled && isTransparentPage}">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path v-if="!isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <transition name="slide">
+            <div v-show="isMobileMenuOpen" style="display: none;" class="md:hidden bg-white shadow-xl absolute w-full left-0 top-full border-t border-gray-100">
+                <div class="px-4 pt-2 pb-6 space-y-1">
+                    <a href="{{ url_for('public.home') }}" class="block px-3 py-3 text-base font-medium text-gray-800 border-b border-gray-50">Home</a>
+                    <a href="{{ url_for('public.destinations_list') }}" class="block px-3 py-3 text-base font-medium text-gray-800 border-b border-gray-50">Destinations</a>
+                    <a href="{{ url_for('public.packages_list') }}" class="block px-3 py-3 text-base font-medium text-gray-800 border-b border-gray-50">Packages</a>
+                    <a href="{{ url_for('public.activities_list') }}" class="block px-3 py-3 text-base font-medium text-gray-800 border-b border-gray-50">Activities</a>
+                    <a href="{{ url_for('public.gallery') }}" class="block px-3 py-3 text-base font-medium text-gray-800 border-b border-gray-50">Gallery</a>
+                    <a href="{{ url_for('public.about') }}" class="block px-3 py-3 text-base font-medium text-gray-800 border-b border-gray-50">About</a>
+                    <a href="{{ url_for('public.contact') }}" class="block px-3 py-3 text-base font-medium text-gray-800">Contact</a>
+                    <div class="mt-4 px-3">
+                        <a href="{{ url_for('public.home') }}#inquiry-app" class="block w-full text-center btn btn-primary py-3">Plan Trip</a>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </nav>
+</header>
+</div>

@@ -1,0 +1,109 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}{{ category.name }}{% endblock %}
+{% block page_subtitle %}Manage images for this category{% endblock %}
+
+{% block content %}
+<div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+    <a href="{{ url_for('admin.gallery_list') }}" class="hover:text-primary-600 transition-colors">Gallery</a>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-gray-800 font-medium">{{ category.name }}</span>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- LEFT: Images List (2/3) -->
+    <div class="lg:col-span-2">
+        <div class="admin-card">
+            <div class="admin-card-header flex justify-between items-center">
+                <h2 class="admin-card-title">Images ({{ category.images.count() }})</h2>
+            </div>
+            
+            {% if category.images.count() > 0 %}
+            <ul class="divide-y divide-gray-100">
+                {% for img in category.images.all() %}
+                <li class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <!-- Order display -->
+                        <span class="text-xs font-semibold text-gray-400 w-6 text-center">#{{ img.display_order }}</span>
+                        
+                        <!-- Thumbnail -->
+                        <img src="{{ img.image_url }}" alt="Gallery Image" class="w-16 h-16 rounded object-cover border border-gray-200">
+                        
+                        <!-- Caption -->
+                        <div class="max-w-xs">
+                            {% if img.caption %}
+                            <p class="text-sm font-medium text-gray-800 truncate">{{ img.caption }}</p>
+                            {% else %}
+                            <p class="text-sm text-gray-400 italic">No caption</p>
+                            {% endif %}
+                            <p class="text-xs text-gray-400 truncate mt-0.5" title="{{ img.image_url }}">{{ img.image_url }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <!-- Reorder buttons -->
+                        <div class="flex flex-col gap-1 mr-2">
+                            {% if not loop.first %}
+                            <form action="{{ url_for('admin.gallery_image_move', id=img.id, direction='up') }}" method="POST">
+                                <button type="submit" class="text-gray-400 hover:text-primary-600 p-0.5 rounded hover:bg-primary-50 transition-colors" title="Move Up">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+                                </button>
+                            </form>
+                            {% else %}
+                            <div class="w-5 h-5"></div>
+                            {% endif %}
+                            
+                            {% if not loop.last %}
+                            <form action="{{ url_for('admin.gallery_image_move', id=img.id, direction='down') }}" method="POST">
+                                <button type="submit" class="text-gray-400 hover:text-primary-600 p-0.5 rounded hover:bg-primary-50 transition-colors" title="Move Down">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </button>
+                            </form>
+                            {% else %}
+                            <div class="w-5 h-5"></div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Delete button -->
+                        <form action="{{ url_for('admin.gallery_image_delete', id=img.id) }}" method="POST" onsubmit="return confirm('Delete this image?');">
+                            <button type="submit" class="admin-btn-icon text-red-500 hover:text-red-700 hover:bg-red-50" title="Delete">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="p-8 text-center">
+                <p class="text-gray-500">No images in this category yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- RIGHT: Add Image Form (1/3) -->
+    <div>
+        <div class="admin-card sticky top-6">
+            <div class="admin-card-header"><h2 class="admin-card-title">Add Image</h2></div>
+            <div class="p-6">
+                <form method="POST" action="{{ url_for('admin.gallery_category', id=category.id) }}" class="space-y-4">
+                    <div class="form-group">
+                        <label for="image_url" class="form-label">Image URL <span class="text-red-500">*</span></label>
+                        <input type="url" id="image_url" name="image_url" required class="form-input" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="caption" class="form-label">Caption (Optional)</label>
+                        <input type="text" id="caption" name="caption" class="form-input" placeholder="e.g. Beautiful Dal Lake">
+                    </div>
+                    <button type="submit" class="admin-btn admin-btn-primary w-full justify-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Upload Image
+                    </button>
+                    <p class="form-hint text-center mt-3">Cloudinary integration will replace URL input later.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

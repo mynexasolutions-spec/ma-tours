@@ -1,0 +1,167 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Add Package{% endblock %}
+{% block page_subtitle %}Create a new tour package{% endblock %}
+
+{% block content %}
+<div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+    <a href="{{ url_for('admin.packages_list') }}" class="hover:text-primary-600 transition-colors">Packages</a>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-gray-800 font-medium">Add New</span>
+</div>
+
+<form method="POST" class="space-y-6 max-w-3xl">
+    <!-- Basic Info -->
+    <div class="admin-card">
+        <div class="admin-card-header"><h2 class="admin-card-title">Basic Information</h2></div>
+        <div class="p-6 space-y-5">
+            <div class="form-group">
+                <label for="title" class="form-label">Package Title <span class="text-red-500">*</span></label>
+                <input type="text" id="title" name="title" required class="form-input"
+                       placeholder="e.g. Kashmir Honeymoon Package 5N/6D"
+                       value="{{ request.form.get('title', '') }}">
+                <p class="form-hint" id="slug-preview">Slug will be auto-generated from the title.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="form-group">
+                    <label for="destination_id" class="form-label">Destination</label>
+                    <select id="destination_id" name="destination_id" class="form-input">
+                        <option value="">— Select Destination —</option>
+                        {% for dest in destinations %}
+                        <option value="{{ dest.id }}" {{ 'selected' if request.form.get('destination_id') == dest.id }}>{{ dest.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="price_from" class="form-label">Starting Price (Rs.)</label>
+                    <input type="number" id="price_from" name="price_from" class="form-input" step="1" min="0"
+                           placeholder="e.g. 15000"
+                           value="{{ request.form.get('price_from', '') }}">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="form-group">
+                    <label for="duration_nights" class="form-label">Nights</label>
+                    <input type="number" id="duration_nights" name="duration_nights" class="form-input" min="0"
+                           placeholder="e.g. 5" value="{{ request.form.get('duration_nights', '') }}">
+                </div>
+                <div class="form-group">
+                    <label for="duration_days" class="form-label">Days</label>
+                    <input type="number" id="duration_days" name="duration_days" class="form-input" min="1"
+                           placeholder="e.g. 6" value="{{ request.form.get('duration_days', '') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Categories</label>
+                <div class="flex flex-wrap gap-3 mt-1">
+                    {% for cat in categories %}
+                    <label class="form-checkbox-label">
+                        <input type="checkbox" name="category_ids" value="{{ cat.id }}" class="form-checkbox-input"
+                               {{ 'checked' if cat.id in request.form.getlist('category_ids') }}>
+                        <span class="form-checkbox-text">{{ cat.name }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Activities</label>
+                <div class="flex flex-wrap gap-3 mt-1">
+                    {% for act in activities %}
+                    <label class="form-checkbox-label">
+                        <input type="checkbox" name="activity_ids" value="{{ act.id }}" class="form-checkbox-input"
+                               {{ 'checked' if act.id in request.form.getlist('activity_ids') }}>
+                        <span class="form-checkbox-text">{{ act.name }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="short_description" class="form-label">Short Description</label>
+                <input type="text" id="short_description" name="short_description" class="form-input"
+                       placeholder="One-line summary for package cards"
+                       value="{{ request.form.get('short_description', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Full Description</label>
+                <textarea id="description" name="description" rows="5" class="form-input form-textarea"
+                          placeholder="Detailed package description...">{{ request.form.get('description', '') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="hotel_details" class="form-label">Hotel Details</label>
+                <textarea id="hotel_details" name="hotel_details" rows="3" class="form-input form-textarea"
+                          placeholder="Hotel names, star ratings, room types...">{{ request.form.get('hotel_details', '') }}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO -->
+    <div class="admin-card">
+        <div class="admin-card-header"><h2 class="admin-card-title">SEO</h2></div>
+        <div class="p-6 space-y-5">
+            <div class="form-group">
+                <label for="seo_title" class="form-label">SEO Title</label>
+                <input type="text" id="seo_title" name="seo_title" class="form-input"
+                       placeholder="Custom title for search engines (auto-uses package title if empty)"
+                       value="{{ request.form.get('seo_title', '') }}">
+            </div>
+            <div class="form-group">
+                <label for="seo_description" class="form-label">SEO Description</label>
+                <textarea id="seo_description" name="seo_description" rows="2" class="form-input form-textarea"
+                          placeholder="Meta description for search results...">{{ request.form.get('seo_description', '') }}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status -->
+    <div class="admin-card">
+        <div class="admin-card-header"><h2 class="admin-card-title">Status</h2></div>
+        <div class="p-6 space-y-4">
+            <label class="form-toggle-wrapper">
+                <input type="checkbox" name="is_active" class="form-toggle-input" checked>
+                <div class="form-toggle-switch"></div>
+                <span class="form-toggle-label">Active</span>
+            </label>
+            <label class="form-toggle-wrapper">
+                <input type="checkbox" name="is_featured" class="form-toggle-input">
+                <div class="form-toggle-switch"></div>
+                <span class="form-toggle-label">Featured on Homepage</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="bg-blue-50 text-blue-800 p-4 rounded-lg mb-6 text-sm flex items-start gap-3 border border-blue-100">
+        <svg class="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div>
+            <strong class="font-medium block mb-0.5">Note: Itinerary, Images, and Availability Dates</strong>
+            You can add the Day-wise Itinerary, Departures/Dates, Highlights, Inclusions, Exclusions, and Gallery Images on the <strong>next screen</strong> after saving this basic information.
+        </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+        <button type="submit" class="admin-btn admin-btn-primary">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Save & Continue to Next Step
+        </button>
+        <a href="{{ url_for('admin.packages_list') }}" class="admin-btn admin-btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<script>
+const nameInput = document.getElementById('title');
+const slugPreview = document.getElementById('slug-preview');
+if (nameInput) {
+    nameInput.addEventListener('input', function() {
+        const val = this.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        slugPreview.innerHTML = val ? 'Slug: <code>/packages/' + val + '</code>' : 'Slug will be auto-generated from the title.';
+    });
+}
+</script>
+{% endblock %}

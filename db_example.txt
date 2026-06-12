@@ -1,0 +1,424 @@
+the database schema is the most important thing to get right. If we design this well, the admin panel, APIs, and frontend become much easier.
+
+# Core Database Design (V1)
+
+
+1. admin
+
+admin
+------
+id UUID PK
+name
+email
+password_hash
+created_at
+updated_at
+
+
+2. destinations
+
+A destination can have many packages.
+
+destinations
+------------
+id UUID PK
+name
+slug
+description
+hero_image_url
+is_active
+created_at
+updated_at
+
+    Examples:
+
+        Kashmir
+        Goa
+        Kerala
+        Dubai
+        Bali
+        Umrah
+
+
+3. categories
+
+categories
+----------
+id UUID PK
+name
+slug
+created_at
+
+    seed data:
+
+        Domestic
+        International
+        Honeymoon
+        Family
+        Group Tour
+        Umrah
+
+
+4. packages
+
+packages
+--------
+id UUID PK
+
+destination_id FK
+
+title
+slug
+
+short_description
+description
+
+price_from
+
+duration_days
+duration_nights
+
+hotel_details
+
+is_featured
+is_active
+
+seo_title
+seo_description
+
+created_at
+updated_at
+
+
+5. package_categories
+
+Many-to-many relationship.
+
+package_categories
+------------------
+package_id FK
+category_id FK
+
+    Example:
+
+        Kashmir Honeymoon Package
+
+        belongs to:
+
+        Domestic
+        Honeymoon
+
+
+6. package_images
+Cloudinary URLs.
+
+package_images
+--------------
+id UUID PK
+package_id FK
+image_url
+display_order
+created_at
+
+    A package can have many images.
+
+
+7. package_highlights
+Instead of storing JSON.
+
+package_highlights
+------------------
+id UUID PK
+package_id FK
+highlight
+display_order
+
+    Example:
+
+        Shikara Ride
+        Gulmarg Visit
+        Airport Transfers
+
+
+8. package_inclusions
+
+package_inclusions
+------------------
+id UUID PK
+package_id FK
+inclusion
+display_order
+
+
+9. package_exclusions
+
+package_exclusions
+------------------
+id UUID PK
+package_id FK
+exclusion
+display_order
+
+
+10. package_itinerary
+One row per day.
+
+package_itinerary
+-----------------
+id UUID PK
+package_id FK
+day_number
+title
+description
+
+    Example:
+
+        Day 1 → Arrival in Srinagar
+
+        Day 2 → Gulmarg Excursion
+
+
+11. inquiries
+Most important business table.
+
+inquiries
+---------
+id UUID PK
+
+package_id FK NULL
+
+name
+phone
+email
+
+travel_date
+
+travelers_count
+
+message
+
+source
+
+status
+
+admin_notes
+
+created_at
+updated_at
+
+    source values
+        homepage
+        package
+        contact
+        whatsapp
+
+    status values
+        new
+        contacted
+        interested
+        booked
+        closed
+
+    This becomes a mini CRM.
+
+
+12. testimonials
+
+testimonials
+------------
+id UUID PK
+
+name
+
+package_taken
+
+rating
+
+review
+
+image_url
+
+is_featured
+
+is_active
+
+created_at
+
+
+13. faqs
+Global FAQs only.
+
+faqs
+----
+id UUID PK
+
+question
+
+answer
+
+display_order
+
+is_active
+
+created_at
+
+    No package-specific FAQs.
+
+
+14. gallery_categories
+
+gallery_categories
+------------------
+id UUID PK
+
+name
+slug
+
+    Examples:
+
+        Kashmir
+        Goa
+        Kerala
+        Umrah
+        Customer Trips
+
+
+15. gallery_images
+
+gallery_images
+--------------
+id UUID PK
+
+category_id FK
+
+image_url
+
+caption
+
+display_order
+
+is_active
+
+created_at
+
+
+16. hero_slides
+Homepage slider
+
+hero_slides
+-----------
+id UUID PK
+
+title
+
+subtitle
+
+image_url
+
+cta_text
+
+cta_link
+
+display_order
+
+is_active
+
+created_at
+
+
+17. announcements
+Top notification bar.
+
+announcements
+-------------
+id UUID PK
+
+text
+
+cta_text
+
+cta_link
+
+is_active
+
+created_at
+
+    Examples:
+
+        Summer Sale
+        Umrah Special
+        Honeymoon Offer
+
+    Only one active at a time.
+
+
+18. site_settings
+One table for all business settings.
+
+site_settings
+-------------
+id UUID PK
+
+business_name
+
+phone
+
+whatsapp
+
+email
+
+address
+
+facebook_url
+
+instagram_url
+
+youtube_url
+
+google_maps_url
+
+footer_text
+
+updated_at
+
+    This prevents hardcoding contact info.
+
+
+
+
+# Relationship Diagram
+
+Destination
+    |
+    |
+Packages
+    |
+    +---- Package Images
+    |
+    +---- Highlights
+    |
+    +---- Inclusions
+    |
+    +---- Exclusions
+    |
+    +---- Itinerary
+    |
+    +---- Inquiries
+
+Categories
+    |
+Package Categories
+
+Gallery Categories
+    |
+Gallery Images
+
+Hero Slides
+
+FAQs
+
+Testimonials
+
+Site Settings
+
+Announcements

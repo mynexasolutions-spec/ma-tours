@@ -1,0 +1,55 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Announcement Bar{% endblock %}
+{% block page_subtitle %}Manage the top announcement banner{% endblock %}
+
+{% block content %}
+<div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+    <span class="text-gray-800 font-medium">Announcement</span>
+</div>
+
+<form method="POST" class="max-w-2xl">
+    <div class="admin-card">
+        <div class="admin-card-header"><h2 class="admin-card-title">Banner Content</h2></div>
+        <div class="p-6 space-y-5">
+            <div class="form-group">
+                <label for="text" class="form-label">Announcement Text</label>
+                <input type="text" id="text" name="text" class="form-input"
+                       placeholder="e.g. Special Discount: Get 20% off on all Kashmir packages!"
+                       value="{{ announcement.text if announcement else request.form.get('text', '') }}">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="form-group">
+                    <label for="cta_text" class="form-label">Button Text (Optional)</label>
+                    <input type="text" id="cta_text" name="cta_text" class="form-input"
+                           placeholder="e.g. Book Now"
+                           value="{{ announcement.cta_text if announcement else request.form.get('cta_text', '') }}">
+                </div>
+                <div class="form-group">
+                    <label for="cta_link" class="form-label">Button Link (Optional)</label>
+                    <input type="text" id="cta_link" name="cta_link" class="form-input"
+                           placeholder="e.g. /packages"
+                           value="{{ announcement.cta_link if announcement else request.form.get('cta_link', '') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-toggle-wrapper">
+                    <input type="checkbox" name="is_active" class="form-toggle-input"
+                           {{ 'checked' if announcement and announcement.is_active else '' }}>
+                    <div class="form-toggle-switch"></div>
+                    <span class="form-toggle-label">Show Banner on Website</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-3 mt-6">
+        <button type="submit" class="admin-btn admin-btn-primary">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Save Announcement
+        </button>
+    </div>
+</form>
+{% endblock %}

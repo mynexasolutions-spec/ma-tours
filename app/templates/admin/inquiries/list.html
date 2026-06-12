@@ -1,0 +1,119 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Inquiries{% endblock %}
+{% block page_subtitle %}Manage customer leads and requests{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="flex flex-wrap gap-2 border-b border-gray-200 pb-px">
+        <a href="{{ url_for('admin.inquiries_list') }}" class="px-4 py-2 text-sm font-medium border-b-2 transition-colors {{ 'border-primary-600 text-primary-600' if not current_status else 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+            All ({{ counts.all }})
+        </a>
+        <a href="{{ url_for('admin.inquiries_list', status='new') }}" class="px-4 py-2 text-sm font-medium border-b-2 transition-colors {{ 'border-primary-600 text-primary-600' if current_status == 'new' else 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+            New <span class="ml-1 px-2 py-0.5 rounded-full text-xs {% if current_status == 'new' %}bg-primary-100 text-primary-700{% else %}bg-gray-100 text-gray-600{% endif %}">{{ counts.new }}</span>
+        </a>
+        <a href="{{ url_for('admin.inquiries_list', status='contacted') }}" class="px-4 py-2 text-sm font-medium border-b-2 transition-colors {{ 'border-primary-600 text-primary-600' if current_status == 'contacted' else 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+            Contacted ({{ counts.contacted }})
+        </a>
+        <a href="{{ url_for('admin.inquiries_list', status='interested') }}" class="px-4 py-2 text-sm font-medium border-b-2 transition-colors {{ 'border-primary-600 text-primary-600' if current_status == 'interested' else 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+            Interested ({{ counts.interested }})
+        </a>
+        <a href="{{ url_for('admin.inquiries_list', status='booked') }}" class="px-4 py-2 text-sm font-medium border-b-2 transition-colors {{ 'border-primary-600 text-primary-600' if current_status == 'booked' else 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+            Booked ({{ counts.booked }})
+        </a>
+        <a href="{{ url_for('admin.inquiries_list', status='closed') }}" class="px-4 py-2 text-sm font-medium border-b-2 transition-colors {{ 'border-primary-600 text-primary-600' if current_status == 'closed' else 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+            Closed ({{ counts.closed }})
+        </a>
+    </div>
+</div>
+
+<div class="admin-card">
+    {% if inquiries %}
+    <div class="overflow-x-auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Contact</th>
+                    <th>Source / Package</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inquiry in inquiries %}
+                <tr>
+                    <td>
+                        <span class="text-sm font-medium text-gray-800">{{ inquiry.created_at.strftime('%b %d, %Y') }}</span>
+                        <p class="text-xs text-gray-500">{{ inquiry.created_at.strftime('%I:%M %p') }}</p>
+                    </td>
+                    <td>
+                        <span class="font-semibold text-gray-800">{{ inquiry.name }}</span>
+                        {% if inquiry.travelers_count %}
+                        <p class="text-xs text-gray-500 mt-0.5">{{ inquiry.travelers_count }} Travelers</p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="flex flex-col gap-1 text-sm text-gray-600">
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                {{ inquiry.phone }}
+                            </span>
+                            {% if inquiry.email %}
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                {{ inquiry.email }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 capitalize mb-1">
+                            {{ inquiry.source }}
+                        </span>
+                        {% if inquiry.package %}
+                        <p class="text-xs text-primary-600 font-medium truncate max-w-[200px]" title="{{ inquiry.package.title }}">
+                            {{ inquiry.package.title }}
+                        </p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% set status_classes = {
+                            'new': 'bg-blue-100 text-blue-800 border-blue-200',
+                            'contacted': 'bg-amber-100 text-amber-800 border-amber-200',
+                            'interested': 'bg-purple-100 text-purple-800 border-purple-200',
+                            'booked': 'bg-green-100 text-green-800 border-green-200',
+                            'closed': 'bg-gray-100 text-gray-800 border-gray-200'
+                        } %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize border {{ status_classes[inquiry.status] }}">
+                            {{ inquiry.status }}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <a href="{{ url_for('admin.inquiries_detail', id=inquiry.id) }}" class="admin-btn admin-btn-secondary py-1 px-3 text-xs">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+        </div>
+        <p class="text-gray-500 mt-4 font-medium">No inquiries found</p>
+        <p class="text-gray-400 text-sm mt-1">
+            {% if current_status %}
+            No inquiries currently marked as "{{ current_status }}".
+            {% else %}
+            You haven't received any inquiries yet.
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

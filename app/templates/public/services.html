@@ -1,0 +1,102 @@
+{% extends "public/base.html" %}
+
+{% set is_transparent_nav = True %}
+
+{% block title %}M.A. Tours | Our Services{% endblock %}
+{% block meta_description %}From bespoke honeymoons to corporate retreats and local transport, discover the premium travel services offered by M.A. Tours & Travels in Kashmir.{% endblock %}
+
+{% block content %}
+<!-- Hero Header -->
+<div class="relative bg-gray-900 py-24 sm:py-32 overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=2070" alt="Resort in Kashmir" class="w-full h-full object-cover opacity-40">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-serif text-white mb-6">Our Services</h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">Comprehensive, premium travel solutions designed to make your Kashmiri getaway absolutely effortless.</p>
+    </div>
+</div>
+
+<div class="bg-gray-50 py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            
+            <!-- Service 1 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=1000" alt="Honeymoon Packages" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <h3 class="absolute bottom-6 left-6 text-2xl font-bold font-serif text-white">Customized Tour Packages</h3>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">Whether you are planning a romantic honeymoon, an adventurous trek, or a relaxing family vacation, our expert travel planners craft bespoke itineraries tailored exactly to your preferences, pace, and budget.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Honeymoon & Romantic Escapes</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Family & Group Holidays</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Adventure & Trekking Expeditions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1000" alt="Hotel Booking" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <h3 class="absolute bottom-6 left-6 text-2xl font-bold font-serif text-white">Premium Accommodations</h3>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">We have partnered with the finest hotels, resorts, and iconic Dal Lake houseboats across Kashmir. Enjoy exclusive rates and assured quality when you book your stay through us.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Luxury Heritage Houseboats</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 4-Star & 5-Star Boutique Hotels</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Eco-Resorts & Homestays</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=1000" alt="Transportation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <h3 class="absolute bottom-6 left-6 text-2xl font-bold font-serif text-white">Transportation & Fleet</h3>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">Travel across the valley in comfort and style. We provide a modern, well-maintained fleet of vehicles driven by experienced, courteous, and highly knowledgeable local chauffeurs.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Airport Pick-up & Drop</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Luxury SUVs (Innova Crysta, Fortuner)</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Tempo Travelers for Large Groups</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=1000" alt="Flight Booking" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <h3 class="absolute bottom-6 left-6 text-2xl font-bold font-serif text-white">Ticketing & Logistics</h3>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">Let us handle the boring parts. From securing the best domestic flight deals to arranging permits for restricted areas, we ensure a hassle-free logistical experience from start to finish.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Domestic Flight Booking</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Train Ticketing</li>
+                        <li class="flex items-center gap-2 text-sm text-gray-700"><svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Special Area Permits (e.g., Gurez, border areas)</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-20 text-center">
+            <h2 class="text-2xl font-bold font-serif text-gray-900 mb-6">Need something specific?</h2>
+            <a href="{{ url_for('public.contact') }}" class="btn btn-primary px-8 py-3 text-lg shadow-xl shadow-primary-500/30">Contact Us Today</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

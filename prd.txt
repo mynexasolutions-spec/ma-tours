@@ -1,0 +1,503 @@
+# Product Requirements Document (PRD)
+
+## Project Overview
+
+**Project Name:** M A Tours & Travels Website
+
+**Domain:** matoursandtravels.com
+
+**Business Type:** Tours & Travel Agency
+
+**Primary Goal:**
+Generate travel inquiries and leads through package discovery, WhatsApp contact, and inquiry forms.
+
+**Secondary Goal:**
+Provide an admin dashboard for managing packages, gallery, testimonials, FAQs, homepage content, and customer inquiries.
+
+---
+
+# Business Information
+
+Business Name: M A Tours And Travels
+
+Owner: Imtiyaz Shaikh
+
+Phone: 7304916310
+
+Email: [matoursandtravels193@gmail.com](mailto:matoursandtravels193@gmail.com)
+
+facebook: https://www.facebook.com/matoursandtravelsonline
+instagram: https://www.instagram.com/matoursandtravelsonline
+
+Services:
+
+* Domestic Tour Packages
+* International Tour Packages
+* Honeymoon Packages
+* Family Tours
+* Group Tours
+* Umrah Packages
+* Hotel Bookings
+* Flight Bookings
+* Cab / Transportation Services
+* Visa Assistance
+* Customized Tour Packages
+
+---
+
+# Technology Stack
+
+Frontend:
+
+* Vue.js
+* Tailwind CSS
+
+Backend:
+
+* Flask
+
+Database:
+
+* Supabase PostgreSQL
+
+Image Storage:
+
+* Cloudinary
+
+Authentication:
+
+* Flask Login (Admin only)
+
+Deployment:
+
+* VPS / Render / Railway (TBD)
+
+---
+
+# User Roles
+
+## Visitor
+
+Can:
+
+* Browse packages
+* Filter packages
+* View package details
+* View services
+* Browse gallery
+* Read FAQs
+* Submit inquiry forms
+* Contact via WhatsApp
+
+Cannot:
+
+* Book online
+* Create accounts
+* Make payments
+
+---
+
+## Admin
+
+Can:
+
+* Login
+* Manage packages
+* Manage destinations
+* Manage hero slides
+* Manage gallery
+* Manage testimonials
+* Manage FAQs
+* View inquiries
+* Update inquiry status
+* Manage contact information
+* Manage homepage content
+
+---
+
+# Website Pages
+
+## Home
+
+Sections:
+
+1. Announcement Bar
+2. Hero Slider
+3. Featured Packages
+4. Popular Destinations
+5. Services
+6. Why Choose Us
+7. Testimonials
+8. Gallery Preview
+9. FAQ Section
+10. Inquiry Form
+11. Footer
+
+---
+
+## About Us
+
+Sections:
+
+* Company Overview
+* Mission
+* Vision
+* Why Choose Us
+
+---
+
+## Packages Listing
+
+Features:
+
+* Grid Layout
+* Package Cards
+* Filters
+
+Filters:
+
+* Category
+* Destination
+* Duration
+
+---
+
+## Package Detail Page
+
+Sections:
+
+* Hero Image
+* Package Overview
+* Price
+* Duration
+* Destinations Covered
+* Highlights
+* Inclusions
+* Exclusions
+* Hotel Details
+* Day-wise Itinerary
+* Gallery
+* Inquiry Form
+* FAQs
+* Related Packages
+
+---
+
+## Services Page
+
+Services:
+
+* Flight Booking
+* Hotel Booking
+* Visa Assistance
+* Cab Services
+* Customized Tours
+
+---
+
+## Gallery
+
+Features:
+
+* Category Filters
+* Image Grid
+* Lightbox View
+
+---
+
+## Contact Us
+
+Fields:
+
+* Name
+* Phone
+* Email
+* Message
+
+Display:
+
+* Phone
+* Email
+* Address
+* Social Links
+
+---
+
+## Privacy Policy
+
+Static Page
+
+---
+
+## Terms & Conditions
+
+Static Page
+
+---
+
+# Homepage Hero Slider
+
+Admin Managed
+
+Each Slide Contains:
+
+* Title
+* Subtitle
+* Background Image
+* CTA Text
+* CTA Link
+* Display Order
+* Active Status
+
+Slider:
+
+* Auto Rotate
+* Manual Navigation
+* Mobile Responsive
+
+---
+
+# Destinations
+
+Separate Entity
+
+Examples:
+
+* Kashmir
+* Goa
+* Kerala
+* Dubai
+* Bali
+* Umrah
+
+A destination can have multiple packages.
+
+---
+
+# Package Categories
+
+A package may belong to multiple categories.
+
+Categories:
+
+* Domestic
+* International
+* Honeymoon
+* Family
+* Group Tour
+* Umrah
+
+---
+
+# Inquiry System
+
+Inquiry Sources:
+
+* Homepage Form
+* Package Page Form
+* Contact Page Form
+
+Store in Database.
+
+Fields:
+
+* Name
+* Phone
+* Email
+* Destination Interested In
+* Travel Date
+* Number Of Travelers
+* Message
+
+Lead Status:
+
+* New
+* Contacted
+* Interested
+* Booked
+* Closed
+
+Admin can update status and notes.
+
+---
+
+# Testimonials
+
+Admin Managed
+
+Fields:
+
+* Name
+* Package Taken
+* Review
+* Rating
+* Image (Optional)
+* Featured
+
+Display:
+
+* Homepage
+* Package Pages
+
+---
+
+# FAQ System
+
+Admin Managed
+
+Global FAQs Only
+
+Fields:
+
+* Question
+* Answer
+* Display Order
+* Active
+
+Display:
+
+* Homepage
+* Package Pages
+
+No package-specific FAQs in Version 1.
+
+---
+
+# Gallery System
+
+Admin Managed
+
+Fields:
+
+* Image
+* Category
+* Caption
+* Display Order
+* Active
+
+Categories:
+
+* Kashmir
+* Goa
+* Kerala
+* Umrah
+* Customer Trips
+* Hotels
+
+---
+
+# Admin Dashboard
+
+Dashboard Widgets:
+
+* Total Packages
+* Active Packages
+* Total Inquiries
+* New Inquiries
+* Recent Inquiries
+
+---
+
+# Package Management
+
+Admin Can:
+
+* Add Package
+* Edit Package
+* Delete Package
+* Activate Package
+* Deactivate Package
+
+Package Fields:
+
+* Title
+* Slug
+* Destination
+* Categories
+* Price
+* Duration
+* Description
+* Highlights
+* Inclusions
+* Exclusions
+* Hotel Details
+* Itinerary
+* Images
+* Featured
+* Active
+
+---
+
+# Contact Settings
+
+Admin Managed
+
+Fields:
+
+* Phone
+* WhatsApp
+* Email
+* Address
+* Facebook URL
+* Instagram URL
+
+---
+
+# SEO Requirements
+
+Each Package Must Support:
+
+* SEO Title
+* SEO Description
+* Slug
+
+Example:
+
+/packages/kashmir-5n-6d
+
+Not:
+
+/package/12
+
+---
+
+# WhatsApp Integration
+
+Floating WhatsApp Button
+
+Package CTA:
+
+"Enquire on WhatsApp"
+
+Pre-filled Message:
+
+Hello, I am interested in the [Package Name] package.
+
+---
+
+# Version 1 Exclusions
+
+Not Included:
+
+* Online Payments
+* Booking Engine
+* Customer Accounts
+* User Login
+* Coupon System
+* Blog
+* Visitor Reviews
+* Multi-Admin Roles
+
+These may be added in future versions.
+
+---
+
+# Success Criteria
+
+* Admin can manage website content without code changes.
+* Visitors can easily discover packages.
+* Visitors can submit inquiries.
+* Leads are stored and tracked through the dashboard.
+* Website is mobile responsive.
+* Website loads quickly and is SEO-friendly.
+* WhatsApp inquiries are encouraged throughout the site.

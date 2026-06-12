@@ -1,0 +1,119 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Destinations{% endblock %}
+{% block page_subtitle %}Manage travel destinations{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <span class="text-sm text-gray-500">{{ destinations | length }} destination{{ 's' if destinations | length != 1 }}</span>
+    </div>
+    <a href="{{ url_for('admin.destinations_add') }}" class="admin-btn admin-btn-primary" id="add-destination-btn">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add Destination
+    </a>
+</div>
+
+<!-- Destinations Table -->
+<div class="admin-card">
+    {% if destinations %}
+    <div class="overflow-x-auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Destination</th>
+                    <th>Slug</th>
+                    <th>Packages</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dest in destinations %}
+                <tr>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            {% if dest.hero_image_url %}
+                            <img src="{{ dest.hero_image_url }}" alt="{{ dest.name }}"
+                                 class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                            {% else %}
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <span class="font-semibold text-gray-800">{{ dest.name }}</span>
+                                {% if dest.description %}
+                                <p class="text-xs text-gray-400 mt-0.5 max-w-xs truncate">{{ dest.description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <code class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">/{{ dest.slug }}</code>
+                    </td>
+                    <td>
+                        <span class="text-gray-600">{{ dest.packages.count() }}</span>
+                    </td>
+                    <td>
+                        {% if dest.is_active %}
+                            <span class="status-badge status-booked">Active</span>
+                        {% else %}
+                            <span class="status-badge status-closed">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <a href="{{ url_for('admin.destinations_edit', id=dest.id) }}"
+                               class="admin-btn-icon" title="Edit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </a>
+                            <form action="{{ url_for('admin.destinations_toggle', id=dest.id) }}" method="POST" class="inline">
+                                <button type="submit" class="admin-btn-icon {% if dest.is_active %}text-amber-600 hover:bg-amber-50{% else %}text-green-600 hover:bg-green-50{% endif %}"
+                                        title="{{ 'Deactivate' if dest.is_active else 'Activate' }}">
+                                    {% if dest.is_active %}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                                    </svg>
+                                    {% else %}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto">
+            <svg class="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+        </div>
+        <p class="text-gray-500 mt-4 font-medium">No destinations yet</p>
+        <p class="text-gray-400 text-sm mt-1">Add your first destination to get started.</p>
+        <a href="{{ url_for('admin.destinations_add') }}" class="admin-btn admin-btn-primary mt-5 inline-flex">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Add Destination
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

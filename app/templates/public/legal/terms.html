@@ -1,0 +1,52 @@
+{% extends "public/base.html" %}
+
+{% block title %}M.A. Tours | Terms & Conditions{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 md:p-16">
+            
+            <div class="mb-12 border-b border-gray-100 pb-8">
+                <h1 class="text-4xl font-bold font-serif text-gray-900 mb-4">Terms & Conditions</h1>
+                <p class="text-gray-500">Last updated: {{ current_year | default('2023') }}</p>
+            </div>
+
+            <div class="prose prose-lg prose-primary max-w-none text-gray-600">
+                <h2>1. Agreement to Terms</h2>
+                <p>These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and <strong>{{ settings.business_name if settings else 'M.A. Tours & Travels' }}</strong> ("we," "us" or "our"), concerning your access to and use of our website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto.</p>
+
+                <h2>2. Bookings and Payments</h2>
+                <p>All bookings made through our website or directly with our agents are subject to availability. A deposit is required to confirm a booking. The full payment must be made prior to the commencement of the tour or services, as stipulated in your invoice.</p>
+                <ul>
+                    <li>Prices are subject to change without notice until the booking is confirmed.</li>
+                    <li>Any bank charges or processing fees incurred during payment are the responsibility of the client.</li>
+                </ul>
+
+                <h2>3. Cancellations and Refunds</h2>
+                <p>If you wish to cancel your booking, you must notify us in writing. The following cancellation policy generally applies (unless specified otherwise in your itinerary):</p>
+                <ul>
+                    <li>Cancellation 30+ days prior to arrival: 10% of total package cost.</li>
+                    <li>Cancellation 15-29 days prior to arrival: 50% of total package cost.</li>
+                    <li>Cancellation less than 15 days prior to arrival: 100% of total package cost (No Refund).</li>
+                </ul>
+
+                <h2>4. Modifications to Itinerary</h2>
+                <p>We reserve the right to alter or modify itineraries or accommodations in the event of circumstances beyond our control (e.g., weather conditions, political unrest, natural disasters). In such cases, we will provide alternatives of a similar standard.</p>
+
+                <h2>5. Limitation of Liability</h2>
+                <p>We act only in the capacity of an agent for the hotels, airlines, transporters, railways, and the contractors providing other services. We shall not be responsible for any delays, alterations in the program, or expenses incurred—directly or indirectly—due to natural hazards, flight cancellations, accident, breakdown of machinery or equipment, or other causes beyond our control.</p>
+
+                <h2>6. Contact Information</h2>
+                <p>If you have any questions or comments about these Terms and Conditions, please contact us at:</p>
+                <p>
+                    {% if settings and settings.email %}<strong>Email:</strong> {{ settings.email }}<br>{% endif %}
+                    {% if settings and settings.phone %}<strong>Phone:</strong> {{ settings.phone }}<br>{% endif %}
+                    {% if settings and settings.address %}<strong>Address:</strong> {{ settings.address }}{% endif %}
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

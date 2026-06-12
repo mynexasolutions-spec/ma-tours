@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Flask
+instance/
+
+# Alembic
+migrations/versions/__pycache__/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Uploads (local dev)
+uploads/

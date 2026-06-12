@@ -1,0 +1,138 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Overview of your travel business{% endblock %}
+
+{% block content %}
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+
+    <!-- Total Packages -->
+    <div class="stat-card">
+        <div class="stat-card-icon bg-blue-50">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+        </div>
+        <div class="stat-card-data">
+            <span class="stat-card-value">{{ total_packages }}</span>
+            <span class="stat-card-label">Total Packages</span>
+        </div>
+    </div>
+
+    <!-- Active Packages -->
+    <div class="stat-card">
+        <div class="stat-card-icon bg-green-50">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <div class="stat-card-data">
+            <span class="stat-card-value">{{ active_packages }}</span>
+            <span class="stat-card-label">Active Packages</span>
+        </div>
+    </div>
+
+    <!-- Total Inquiries -->
+    <div class="stat-card">
+        <div class="stat-card-icon bg-purple-50">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+        </div>
+        <div class="stat-card-data">
+            <span class="stat-card-value">{{ total_inquiries }}</span>
+            <span class="stat-card-label">Total Inquiries</span>
+        </div>
+    </div>
+
+    <!-- New Inquiries -->
+    <div class="stat-card">
+        <div class="stat-card-icon bg-amber-50">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+        </div>
+        <div class="stat-card-data">
+            <span class="stat-card-value">{{ new_inquiries }}</span>
+            <span class="stat-card-label">New Inquiries</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- Secondary Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+    <div class="stat-card-mini">
+        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span class="stat-mini-value">{{ total_destinations }}</span>
+        <span class="stat-mini-label">Destinations</span>
+    </div>
+    <div class="stat-card-mini">
+        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+        </svg>
+        <span class="stat-mini-value">{{ featured_packages }}</span>
+        <span class="stat-mini-label">Featured</span>
+    </div>
+    <div class="stat-card-mini">
+        <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+        <span class="stat-mini-value">{{ total_testimonials }}</span>
+        <span class="stat-mini-label">Testimonials</span>
+    </div>
+</div>
+
+<!-- Recent Inquiries Table -->
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2 class="admin-card-title">Recent Inquiries</h2>
+        <a href="#" class="admin-card-action">View All</a>
+    </div>
+
+    {% if recent_inquiries %}
+    <div class="overflow-x-auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Source</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inquiry in recent_inquiries %}
+                <tr>
+                    <td class="font-medium text-gray-800">{{ inquiry.name }}</td>
+                    <td class="text-gray-600">{{ inquiry.phone }}</td>
+                    <td>
+                        <span class="source-badge source-{{ inquiry.source }}">{{ inquiry.source }}</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{{ inquiry.status }}">{{ inquiry.status }}</span>
+                    </td>
+                    <td class="text-gray-500 text-sm">
+                        {{ inquiry.created_at.strftime('%d %b %Y') if inquiry.created_at else '—' }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <svg class="w-12 h-12 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        <p class="text-gray-400 mt-3">No inquiries yet.</p>
+        <p class="text-gray-400 text-sm">They will appear here once visitors submit inquiry forms.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

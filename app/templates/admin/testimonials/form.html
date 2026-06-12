@@ -1,0 +1,93 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}{{ 'Edit' if mode == 'edit' else 'Add' }} Testimonial{% endblock %}
+{% block page_subtitle %}Manage customer review details{% endblock %}
+
+{% block content %}
+<div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+    <a href="{{ url_for('admin.testimonials_list') }}" class="hover:text-primary-600 transition-colors">Testimonials</a>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <span class="text-gray-800 font-medium">{{ 'Edit' if mode == 'edit' else 'Add New' }}</span>
+</div>
+
+<form method="POST" class="max-w-2xl">
+    <div class="admin-card">
+        <div class="admin-card-header"><h2 class="admin-card-title">Review Information</h2></div>
+        <div class="p-6 space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="form-group">
+                    <label for="name" class="form-label">Customer Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="name" name="name" required class="form-input"
+                           placeholder="e.g. Rahul Sharma"
+                           value="{{ testimonial.name if mode == 'edit' else request.form.get('name', '') }}">
+                </div>
+                <div class="form-group">
+                    <label for="rating" class="form-label">Rating (1-5)</label>
+                    <select id="rating" name="rating" class="form-input">
+                        <option value="">— Select Rating —</option>
+                        {% for r in range(5, 0, -1) %}
+                        <option value="{{ r }}" {{ 'selected' if (mode == 'edit' and testimonial.rating == r) or request.form.get('rating') == r|string }}>{{ r }} Stars</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="package_taken" class="form-label">Package Taken (Optional)</label>
+                <input type="text" id="package_taken" name="package_taken" class="form-input"
+                       placeholder="e.g. Kashmir Honeymoon Package 5N/6D"
+                       value="{{ testimonial.package_taken if mode == 'edit' else request.form.get('package_taken', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="review" class="form-label">Review Text <span class="text-red-500">*</span></label>
+                <textarea id="review" name="review" required rows="4" class="form-input form-textarea"
+                          placeholder="What did the customer say?">{{ testimonial.review if mode == 'edit' else request.form.get('review', '') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="image_url" class="form-label">Customer Photo URL (Optional)</label>
+                <input type="url" id="image_url" name="image_url" class="form-input"
+                       placeholder="https://..."
+                       value="{{ testimonial.image_url if mode == 'edit' else request.form.get('image_url', '') }}">
+            </div>
+
+            <!-- Package selection -->
+            <div class="form-group sm:col-span-2">
+                <label for="package_id" class="form-label">Related Package (Optional)</label>
+                <select name="package_id" id="package_id" class="form-input">
+                    <option value="">-- Global Review (Shows on Homepage) --</option>
+                    {% for p in packages %}
+                        <option value="{{ p.id }}" {% if testimonial and testimonial.package_id == p.id %}selected{% endif %}>{{ p.title }}</option>
+                    {% endfor %}
+                </select>
+                <p class="mt-1 text-sm text-gray-500">If selected, this review will only appear on that package's page.</p>
+            </div>
+
+            <div class="form-group sm:col-span-2 flex items-center gap-6 mt-2 border-t border-gray-100 pt-4">
+                <label class="form-toggle-wrapper">
+                    <input type="checkbox" name="is_featured" class="form-toggle-input"
+                           {{ 'checked' if (mode == 'edit' and testimonial.is_featured) }}>
+                    <div class="form-toggle-switch"></div>
+                    <span class="form-toggle-label font-medium">Featured Review</span>
+                </label>
+
+                <label class="form-toggle-wrapper">
+                    <input type="checkbox" name="is_active" class="form-toggle-input"
+                           {{ 'checked' if (mode == 'edit' and testimonial.is_active) or mode == 'add' }}>
+                    <div class="form-toggle-switch"></div>
+                    <span class="form-toggle-label font-medium">Active</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-3 mt-6">
+        <button type="submit" class="admin-btn admin-btn-primary">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            {{ 'Update Testimonial' if mode == 'edit' else 'Create Testimonial' }}
+        </button>
+        <a href="{{ url_for('admin.testimonials_list') }}" class="admin-btn admin-btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

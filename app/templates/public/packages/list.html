@@ -1,0 +1,139 @@
+{% extends "public/base.html" %}
+
+{% set is_transparent_nav = True %}
+
+{% block title %}M.A. Tours | Packages{% endblock %}
+
+{% block content %}
+<!-- Hero Header -->
+<div class="relative bg-gray-900 py-24 sm:py-32 overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=2074" alt="Travel Background" class="w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-serif text-white mb-6">Explore Our Packages</h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">Discover handpicked experiences tailored just for you. Filter by your dream destination or travel style.</p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex flex-col lg:flex-row gap-10">
+        
+        <!-- Filters Sidebar -->
+        <aside class="w-full lg:w-1/4 flex-shrink-0">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+                <h2 class="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                    Filter Packages
+                </h2>
+                
+                <form method="GET" action="{{ url_for('public.packages_list') }}" class="space-y-6">
+                    <!-- Destination Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Destination</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="destination" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_destination %}checked{% endif %} onchange="this.form.submit()">
+                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">All Destinations</span>
+                            </label>
+                            {% for dest in destinations %}
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="destination" value="{{ dest.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_destination == dest.slug %}checked{% endif %} onchange="this.form.submit()">
+                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ dest.name }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="h-px bg-gray-100"></div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Travel Style</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="category" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_category %}checked{% endif %} onchange="this.form.submit()">
+                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">All Styles</span>
+                            </label>
+                            {% for cat in categories %}
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="category" value="{{ cat.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_category == cat.slug %}checked{% endif %} onchange="this.form.submit()">
+                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ cat.name }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Packages Grid -->
+        <div class="w-full lg:w-3/4">
+            <div class="mb-6 flex items-center justify-between">
+                <p class="text-gray-600">Showing <span class="font-medium text-gray-900">{{ packages|length }}</span> packages</p>
+                {% if current_category or current_destination %}
+                <a href="{{ url_for('public.packages_list') }}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">Clear All Filters</a>
+                {% endif %}
+            </div>
+
+            {% if packages %}
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                {% for pkg in packages %}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative h-64 overflow-hidden">
+                        {% if pkg.images.count() > 0 %}
+                        <img src="{{ pkg.images.first().image_url }}" alt="{{ pkg.title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        {% else %}
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        {% endif %}
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
+                            ₹{{ "{:,.0f}".format(pkg.price_from) if pkg.price_from else "TBA" }}
+                        </div>
+                        {% if pkg.is_featured %}
+                        <div class="absolute top-4 left-4 bg-primary-600 px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm uppercase tracking-wider">
+                            Featured
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex items-center gap-4 text-sm text-gray-500 mb-3">
+                            <span class="flex items-center gap-1">
+                                <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                {{ pkg.duration_days }}D/{{ pkg.duration_nights }}N
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                {{ pkg.destination.name if pkg.destination else 'Multiple' }}
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold font-serif text-gray-900 mb-2 line-clamp-2"><a href="{{ url_for('public.package_detail', slug=pkg.slug) }}" class="hover:text-primary-600 transition-colors">
+                            {{ pkg.title }}
+                        </a></h3>
+                        
+                        <p class="text-gray-600 text-sm mb-6 line-clamp-2 flex-grow">{{ pkg.short_description or pkg.description[:100]|striptags|safe }}...</p>
+                        
+                        <a href="{{ url_for('public.package_detail', slug=pkg.slug) }}" class="w-full btn btn-secondary text-center">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+                <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">No packages found</h3>
+                <p class="text-gray-500 max-w-md mx-auto mb-8">We couldn't find any packages matching your current filters. Try adjusting your destination or travel style.</p>
+                <a href="{{ url_for('public.packages_list') }}" class="btn btn-primary">Clear All Filters</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}{{ 'Edit' if mode == 'edit' else 'Add' }} Destination{% endblock %}
+{% block page_subtitle %}{{ destination.name if mode == 'edit' else 'Create a new travel destination' }}{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+    <a href="{{ url_for('admin.destinations_list') }}" class="hover:text-primary-600 transition-colors">Destinations</a>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+    </svg>
+    <span class="text-gray-800 font-medium">{{ 'Edit' if mode == 'edit' else 'Add New' }}</span>
+</div>
+
+<form method="POST" class="max-w-2xl">
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2 class="admin-card-title">Destination Details</h2>
+        </div>
+
+        <div class="p-6 space-y-5">
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name" class="form-label">
+                    Destination Name <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="name" name="name" required
+                       class="form-input"
+                       placeholder="e.g. Kashmir, Goa, Dubai"
+                       value="{{ destination.name if mode == 'edit' else request.form.get('name', '') }}">
+                <p class="form-hint" id="slug-preview">
+                    {% if mode == 'edit' %}
+                        Slug: <code>/{{ destination.slug }}</code>
+                    {% else %}
+                        Slug will be auto-generated from the name.
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" rows="4"
+                          class="form-input form-textarea"
+                          placeholder="Brief description of this destination...">{{ destination.description if mode == 'edit' else request.form.get('description', '') }}</textarea>
+            </div>
+
+            <!-- Hero Image URL -->
+            <div class="form-group">
+                <label for="hero_image_url" class="form-label">Hero Image URL</label>
+                <input type="url" id="hero_image_url" name="hero_image_url"
+                       class="form-input"
+                       placeholder="https://res.cloudinary.com/..."
+                       value="{{ destination.hero_image_url if mode == 'edit' and destination.hero_image_url else request.form.get('hero_image_url', '') }}">
+                <p class="form-hint">Paste an image URL. Cloudinary upload will be added later.</p>
+
+                <!-- Image preview -->
+                <div id="image-preview" class="mt-3 {% if not (mode == 'edit' and destination.hero_image_url) %}hidden{% endif %}">
+                    <img id="preview-img"
+                         src="{{ destination.hero_image_url if mode == 'edit' and destination.hero_image_url else '' }}"
+                         alt="Preview"
+                         class="w-full max-w-sm h-40 object-cover rounded-lg border border-gray-200">
+                </div>
+            </div>
+
+            <!-- Active Toggle -->
+            <div class="form-group">
+                <label class="form-toggle-wrapper">
+                    <input type="checkbox" name="is_active" id="is_active"
+                           class="form-toggle-input"
+                           {{ 'checked' if (mode == 'edit' and destination.is_active) or mode == 'add' }}>
+                    <div class="form-toggle-switch"></div>
+                    <span class="form-toggle-label">Active</span>
+                </label>
+                <p class="form-hint mt-1">Inactive destinations won't appear on the public website.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 mt-6">
+        <button type="submit" class="admin-btn admin-btn-primary">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            {{ 'Update Destination' if mode == 'edit' else 'Create Destination' }}
+        </button>
+        <a href="{{ url_for('admin.destinations_list') }}" class="admin-btn admin-btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<script>
+    // Live slug preview
+    const nameInput = document.getElementById('name');
+    const slugPreview = document.getElementById('slug-preview');
+
+    if (nameInput) {
+        nameInput.addEventListener('input', function() {
+            const val = this.value.trim().toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+            if (val) {
+                slugPreview.innerHTML = 'Slug: <code>/' + val + '</code>';
+            } else {
+                slugPreview.textContent = 'Slug will be auto-generated from the name.';
+            }
+        });
+    }
+
+    // Image URL preview
+    const imageInput = document.getElementById('hero_image_url');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+
+    if (imageInput) {
+        imageInput.addEventListener('input', function() {
+            const url = this.value.trim();
+            if (url) {
+                previewImg.src = url;
+                imagePreview.classList.remove('hidden');
+                previewImg.onerror = function() {
+                    imagePreview.classList.add('hidden');
+                };
+            } else {
+                imagePreview.classList.add('hidden');
+            }
+        });
+    }
+</script>
+{% endblock %}
