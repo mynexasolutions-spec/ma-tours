@@ -56,13 +56,13 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">Categories</label>
+                <label class="form-label">Travel Styles</label>
                 <div class="flex flex-wrap gap-3 mt-1">
-                    {% for cat in categories %}
+                    {% for ts in travel_styles %}
                     <label class="form-checkbox-label">
-                        <input type="checkbox" name="category_ids" value="{{ cat.id }}" class="form-checkbox-input"
-                               {{ 'checked' if cat.id in request.form.getlist('category_ids') }}>
-                        <span class="form-checkbox-text">{{ cat.name }}</span>
+                        <input type="checkbox" name="travel_style_ids" value="{{ ts.id }}" class="form-checkbox-input"
+                               {{ 'checked' if ts.id in request.form.getlist('travel_style_ids') }}>
+                        <span class="form-checkbox-text">{{ ts.name }}</span>
                     </label>
                     {% endfor %}
                 </div>

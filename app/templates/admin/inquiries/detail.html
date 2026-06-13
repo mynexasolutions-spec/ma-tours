@@ -78,7 +78,17 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                     <div>
                         <p class="text-sm text-gray-500 mb-1">Expected Travel Date</p>
-                        <p class="font-medium text-gray-800">{{ inquiry.travel_date.strftime('%B %d, %Y') if inquiry.travel_date else 'Not specified' }}</p>
+                        <p class="font-medium text-gray-800">
+                            {% if inquiry.travel_date %}
+                                {% if inquiry.travel_date.strftime %}
+                                    {{ inquiry.travel_date.strftime('%B %d, %Y') }}
+                                {% else %}
+                                    {{ inquiry.travel_date }}
+                                {% endif %}
+                            {% else %}
+                                Not specified
+                            {% endif %}
+                        </p>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500 mb-1">Number of Travelers</p>
@@ -127,7 +137,7 @@
                     </button>
                     
                     <div class="pt-4 border-t border-gray-100 text-xs text-center text-gray-400">
-                        Last updated: {{ inquiry.updated_at.strftime('%b %d, %I:%M %p') }}
+                        Last updated: {{ (inquiry.updated_at or inquiry.created_at).strftime('%b %d, %I:%M %p') }}
                     </div>
                 </div>
             </div>

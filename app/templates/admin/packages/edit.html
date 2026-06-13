@@ -56,14 +56,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Categories</label>
+                        <label class="form-label">Travel Styles</label>
                         <div class="flex flex-wrap gap-3 mt-1">
-                            {% set selected_ids = package.categories | map(attribute='id') | list %}
-                            {% for cat in categories %}
+                            {% set selected_ids = package.travel_styles | map(attribute='id') | list %}
+                            {% for ts in travel_styles %}
                             <label class="form-checkbox-label">
-                                <input type="checkbox" name="category_ids" value="{{ cat.id }}" class="form-checkbox-input"
-                                       {{ 'checked' if cat.id in selected_ids }}>
-                                <span class="form-checkbox-text">{{ cat.name }}</span>
+                                <input type="checkbox" name="travel_style_ids" value="{{ ts.id }}" class="form-checkbox-input"
+                                       {{ 'checked' if ts.id in selected_ids }}>
+                                <span class="form-checkbox-text">{{ ts.name }}</span>
                             </label>
                             {% endfor %}
                         </div>

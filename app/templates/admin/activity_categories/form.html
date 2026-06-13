@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Edit' if mode == 'edit' else 'Add' }} Activity Category{% endblock %}
+{% block page_title %}{{ 'Edit' if mode == 'edit' else 'Add' }} Activity Category{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl">
+    <form method="POST" class="admin-card">
+        <div class="admin-card-header"><h2 class="admin-card-title">{{ 'Edit' if mode == 'edit' else 'Add' }} Activity Category</h2></div>
+        <div class="p-6 space-y-6">
+            <div class="form-group">
+                <label for="name" class="form-label">Category Name <span class="text-red-500">*</span></label>
+                <input type="text" id="name" name="name" required
+                       value="{{ category.name if category else '' }}"
+                       class="form-input" placeholder="e.g., Adventure Activities">
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" rows="3"
+                          class="form-input" placeholder="Brief description of this category (optional)">{{ category.description if category else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="image_url" class="form-label">Category Image</label>
+                <input type="url" id="image_url" name="image_url" 
+                       value="{{ category.image_url if category else '' }}"
+                       class="form-input" placeholder="https://example.com/image.jpg">
+                <p class="mt-1 text-sm text-gray-500">Image displayed on the homepage categories section.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-group">
+                    <label for="display_order" class="form-label">Display Order</label>
+                    <input type="number" id="display_order" name="display_order" 
+                           value="{{ category.display_order if category else 0 }}"
+                           class="form-input">
+                    <p class="mt-1 text-xs text-gray-500">Lower numbers appear first.</p>
+                </div>
+                
+                <div class="form-group flex flex-col justify-center">
+                    <label class="form-label mb-2">Status</label>
+                    <label class="form-checkbox-label">
+                        <input type="checkbox" name="is_active" class="form-checkbox-input"
+                               {% if not category or category.is_active %}checked{% endif %}>
+                        <span class="form-checkbox-text">Active (visible on website)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="pt-5 border-t border-gray-100 flex items-center justify-end gap-3">
+                <a href="{{ url_for('admin.activity_categories_list') }}" class="admin-btn admin-btn-secondary">Cancel</a>
+                <button type="submit" class="admin-btn admin-btn-primary">
+                    {{ 'Save Changes' if mode == 'edit' else 'Add Category' }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -3,11 +3,11 @@ import uuid
 from app.extensions import db
 
 
-# --- Association table for Package <-> Category (many-to-many) ---
-package_categories = db.Table(
-    'package_categories',
+# --- Association table for Package <-> TravelStyle (many-to-many) ---
+package_travel_styles = db.Table(
+    'package_travel_styles',
     db.Column('package_id', db.String(36), db.ForeignKey('packages.id', ondelete='CASCADE'), primary_key=True),
-    db.Column('category_id', db.String(36), db.ForeignKey('categories.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('travel_style_id', db.String(36), db.ForeignKey('travel_styles.id', ondelete='CASCADE'), primary_key=True),
 )
 
 # --- Association table for Package <-> Activity (many-to-many) ---
@@ -46,7 +46,7 @@ class Package(db.Model):
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
 
     # Relationships
-    categories = db.relationship('Category', secondary=package_categories, backref='packages', lazy='joined')
+    travel_styles = db.relationship('TravelStyle', secondary=package_travel_styles, backref='packages', lazy='joined')
     activities = db.relationship('Activity', secondary=package_activities, backref='packages', lazy='joined')
     departures = db.relationship('PackageDeparture', backref='package', lazy='dynamic',
                                  order_by='PackageDeparture.start_date', cascade='all, delete-orphan')

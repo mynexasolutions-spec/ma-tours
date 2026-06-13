@@ -17,46 +17,101 @@
     </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    {% if destinations %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {% for dest in destinations %}
-        <a href="{{ url_for('public.destination_detail', slug=dest.slug) }}" class="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="relative h-64 overflow-hidden bg-gray-100">
-                {% if dest.hero_image_url %}
-                <img src="{{ dest.hero_image_url }}" alt="{{ dest.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                {% else %}
-                <div class="absolute inset-0 flex items-center justify-center text-gray-300">
-                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+    <!-- Domestic Destinations -->
+    <section>
+        <div class="mb-10 text-center">
+            <h2 class="text-3xl font-bold font-serif text-gray-900 mb-4">Domestic Destinations</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Explore the beauty of incredible India, from the snowy peaks of Kashmir to the backwaters of Kerala.</p>
+        </div>
+        
+        {% if domestic_destinations %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for dest in domestic_destinations %}
+            <a href="{{ url_for('public.destination_detail', slug=dest.slug) }}" class="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden bg-gray-100">
+                    {% if dest.hero_image_url %}
+                    <img src="{{ dest.hero_image_url }}" alt="{{ dest.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    {% else %}
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-300">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                    </div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-2xl font-bold text-white mb-1">{{ dest.name }}</h3>
+                        <p class="text-gray-300 text-sm flex items-center gap-2">
+                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                            {{ dest.packages.filter_by(is_active=True).count() }} Packages
+                        </p>
+                    </div>
+                </div>
+                {% if dest.description %}
+                <div class="p-6">
+                    <p class="text-gray-600 line-clamp-2 text-sm">{{ dest.description }}</p>
+                    <div class="mt-4 flex items-center text-primary-600 text-sm font-semibold group-hover:text-primary-700">
+                        Explore Destination
+                        <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </div>
                 </div>
                 {% endif %}
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div class="absolute bottom-6 left-6 right-6">
-                    <h2 class="text-2xl font-bold text-white mb-1">{{ dest.name }}</h2>
-                    <p class="text-gray-300 text-sm flex items-center gap-2">
-                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-primary-500"></span>
-                        {{ dest.packages.filter_by(is_active=True).count() }} Packages
-                    </p>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+            <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+            <p class="text-gray-500">No domestic destinations found.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- International Destinations -->
+    <section>
+        <div class="mb-10 text-center">
+            <h2 class="text-3xl font-bold font-serif text-gray-900 mb-4">International Destinations</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Discover world-class experiences across borders. Perfect for honeymoons, adventures, and luxury escapes.</p>
+        </div>
+        
+        {% if international_destinations %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for dest in international_destinations %}
+            <a href="{{ url_for('public.destination_detail', slug=dest.slug) }}" class="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden bg-gray-100">
+                    {% if dest.hero_image_url %}
+                    <img src="{{ dest.hero_image_url }}" alt="{{ dest.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    {% else %}
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-300">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                    </div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-2xl font-bold text-white mb-1">{{ dest.name }}</h3>
+                        <p class="text-gray-300 text-sm flex items-center gap-2">
+                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                            {{ dest.packages.filter_by(is_active=True).count() }} Packages
+                        </p>
+                    </div>
                 </div>
-            </div>
-            {% if dest.description %}
-            <div class="p-6">
-                <p class="text-gray-600 line-clamp-2 text-sm">{{ dest.description }}</p>
-                <div class="mt-4 flex items-center text-primary-600 text-sm font-semibold group-hover:text-primary-700">
-                    Explore Destination
-                    <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                {% if dest.description %}
+                <div class="p-6">
+                    <p class="text-gray-600 line-clamp-2 text-sm">{{ dest.description }}</p>
+                    <div class="mt-4 flex items-center text-purple-600 text-sm font-semibold group-hover:text-purple-700">
+                        Explore Destination
+                        <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </div>
                 </div>
-            </div>
-            {% endif %}
-        </a>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
-        <h3 class="text-lg font-bold text-gray-900 mb-2">No Destinations Found</h3>
-        <p class="text-gray-500">Check back later for exciting new places to visit.</p>
-    </div>
-    {% endif %}
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+            <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-gray-500">Coming soon! We are preparing exciting new international destinations.</p>
+        </div>
+        {% endif %}
+    </section>
 </div>
 {% endblock %}

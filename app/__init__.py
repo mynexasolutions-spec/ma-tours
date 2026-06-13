@@ -46,6 +46,17 @@ def create_app(config_name=None):
             }
         return {}
 
+    # Auto-initialize and seed database if empty
+    with app.app_context():
+        try:
+            db.create_all()
+            from app.models.admin import Admin
+            if not Admin.query.first():
+                from seeds.seed_data import run_seeds
+                run_seeds()
+        except Exception as e:
+            print(f"Error during auto-initialization: {e}")
+
     return app
 
 

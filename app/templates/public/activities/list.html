@@ -17,29 +17,106 @@
     </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    {% if activities %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {% for act in activities %}
-        <a href="{{ url_for('public.activity_detail', slug=act.slug) }}" class="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="p-6">
-                <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center text-primary-600 mb-4 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+    {% set has_content = false %}
+    
+    {% for category in categories %}
+        {% set active_acts = category.activities|selectattr('is_active', 'equalto', true)|list %}
+        {% if active_acts|length > 0 %}
+            {% set has_content = true %}
+            <div id="{{ category.slug }}" class="scroll-mt-24">
+                <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
+                    {% if category.image_url %}
+                    <img src="{{ category.image_url }}" alt="{{ category.name }}" class="w-12 h-12 rounded-lg object-cover shadow-sm">
+                    {% else %}
+                    <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center text-primary-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <h2 class="text-3xl font-serif font-bold text-gray-900">{{ category.name }}</h2>
+                        {% if category.description %}
+                        <p class="text-gray-500 mt-1">{{ category.description }}</p>
+                        {% endif %}
+                    </div>
                 </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">{{ act.name }}</h3>
-                <p class="text-gray-500 text-sm mb-4">{{ act.packages|length }} Available Packages</p>
-                <div class="flex items-center text-primary-600 text-sm font-semibold">
-                    View Packages
-                    <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {% for act in active_acts %}
+                    <a href="{{ url_for('public.activity_detail', slug=act.slug) }}" class="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
+                        {% if act.image_url %}
+                        <div class="h-40 overflow-hidden">
+                            <img src="{{ act.image_url }}" alt="{{ act.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        {% else %}
+                        <div class="h-24 bg-primary-50 flex items-center justify-center text-primary-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
+                        </div>
+                        {% endif %}
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">{{ act.name }}</h3>
+                            {% if act.description %}
+                            <p class="text-gray-500 text-sm mb-4 line-clamp-2 flex-grow">{{ act.description }}</p>
+                            {% else %}
+                            <div class="flex-grow"></div>
+                            {% endif %}
+                            <p class="text-gray-400 text-xs mb-3">{{ act.packages|length }} Packages Available</p>
+                            <div class="flex items-center text-primary-600 text-sm font-semibold mt-auto pt-4 border-t border-gray-50">
+                                Explore
+                                <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
-        </a>
-        {% endfor %}
-    </div>
-    {% else %}
+        {% endif %}
+    {% endfor %}
+
+    {% if uncategorized|length > 0 %}
+        {% set has_content = true %}
+        <div id="general" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-serif font-bold text-gray-900">Other Experiences</h2>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for act in uncategorized %}
+                <a href="{{ url_for('public.activity_detail', slug=act.slug) }}" class="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
+                    {% if act.image_url %}
+                    <div class="h-40 overflow-hidden">
+                        <img src="{{ act.image_url }}" alt="{{ act.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    {% else %}
+                    <div class="h-24 bg-gray-50 flex items-center justify-center text-gray-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
+                    </div>
+                    {% endif %}
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">{{ act.name }}</h3>
+                        {% if act.description %}
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2 flex-grow">{{ act.description }}</p>
+                        {% else %}
+                        <div class="flex-grow"></div>
+                        {% endif %}
+                        <p class="text-gray-400 text-xs mb-3">{{ act.packages|length }} Packages Available</p>
+                        <div class="flex items-center text-primary-600 text-sm font-semibold mt-auto pt-4 border-t border-gray-50">
+                            Explore
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if not has_content %}
     <div class="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
         <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <h3 class="text-lg font-bold text-gray-900 mb-2">No Activities Found</h3>

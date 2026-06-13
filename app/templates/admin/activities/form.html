@@ -14,12 +14,26 @@
     <div class="admin-card">
         <div class="admin-card-header"><h2 class="admin-card-title">Activity Details</h2></div>
         <div class="p-6 space-y-5">
-            <div class="form-group">
-                <label for="name" class="form-label">Activity Name <span class="text-red-500">*</span></label>
-                <input type="text" id="name" name="name" required class="form-input"
-                       placeholder="e.g. Skiing"
-                       value="{{ activity.name if mode == 'edit' else request.form.get('name', '') }}">
-                <p class="form-hint">Slug will be auto-generated from the name.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-group">
+                    <label for="name" class="form-label">Activity Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="name" name="name" required class="form-input"
+                           placeholder="e.g. Skiing"
+                           value="{{ activity.name if mode == 'edit' else request.form.get('name', '') }}">
+                    <p class="form-hint">Slug will be auto-generated from the name.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="category_id" class="form-label">Activity Category</label>
+                    <select id="category_id" name="category_id" class="form-select w-full">
+                        <option value="">No Category</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if mode == 'edit' and activity.category_id == cat.id %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">

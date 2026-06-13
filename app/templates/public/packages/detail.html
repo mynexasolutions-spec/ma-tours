@@ -329,12 +329,12 @@
                 <p class="text-gray-600 mb-6 italic">"{{ t.content }}"</p>
                 <div class="flex items-center gap-4">
                     {% if t.image_url %}
-                    <img src="{{ t.image_url }}" alt="{{ t.client_name }}" class="w-12 h-12 rounded-full object-cover">
+                    <img src="{{ t.image_url }}" alt="{{ t.name }}" class="w-12 h-12 rounded-full object-cover">
                     {% else %}
-                    <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center font-bold font-serif text-xl">{{ t.client_name[:1] }}</div>
+                    <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center font-bold font-serif text-xl">{{ t.name[:1] }}</div>
                     {% endif %}
                     <div>
-                        <h4 class="font-bold text-gray-900">{{ t.client_name }}</h4>
+                        <h4 class="font-bold text-gray-900">{{ t.name }}</h4>
                         {% if t.location %}<p class="text-xs text-gray-500">{{ t.location }}</p>{% endif %}
                     </div>
                 </div>

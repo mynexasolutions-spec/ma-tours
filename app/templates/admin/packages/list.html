@@ -43,8 +43,8 @@
                                     Featured
                                 </span>
                                 {% endif %}
-                                {% for cat in pkg.categories %}
-                                <span class="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">{{ cat.name }}</span>
+                                {% for ts in pkg.travel_styles %}
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{{ ts.name }}</span>
                                 {% endfor %}
                             </div>
                         </div>

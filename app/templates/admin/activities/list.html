@@ -22,8 +22,10 @@
         <table class="admin-table">
             <thead>
                 <tr>
+                    <th class="w-16">Icon/Image</th>
                     <th>Name</th>
-                    <th>Slug</th>
+                    <th>Category</th>
+                    <th>Description</th>
                     <th>Linked Packages</th>
                     <th>Status</th>
                     <th class="text-right">Actions</th>
@@ -33,9 +35,28 @@
                 {% for activity in activities %}
                 <tr>
                     <td>
-                        <div class="font-medium text-gray-900">{{ activity.name }}</div>
+                        {% if activity.image_url %}
+                        <img src="{{ activity.image_url }}" alt="{{ activity.name }}" class="w-10 h-10 rounded-lg object-cover border border-gray-200">
+                        {% else %}
+                        <div class="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        {% endif %}
                     </td>
-                    <td><code class="text-xs text-gray-500">{{ activity.slug }}</code></td>
+                    <td>
+                        <div class="font-medium text-gray-900">{{ activity.name }}</div>
+                        <div class="text-xs text-gray-500 font-mono mt-0.5">/{{ activity.slug }}</div>
+                    </td>
+                    <td>
+                        {% if activity.category %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                            {{ activity.category.name }}
+                        </span>
+                        {% else %}
+                        <span class="text-gray-400 text-sm">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-gray-500 text-sm max-w-xs truncate" title="{{ activity.description }}">{{ activity.description }}</td>
                     <td><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{{ activity.packages|length }}</span></td>
                     <td>
                         <form action="{{ url_for('admin.activities_toggle', id=activity.id) }}" method="POST" class="inline">

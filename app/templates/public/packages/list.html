@@ -48,18 +48,18 @@
                     
                     <div class="h-px bg-gray-100"></div>
 
-                    <!-- Category Filter -->
+                    <!-- Travel Style Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-3">Travel Style</label>
                         <div class="space-y-2">
                             <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="category" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_category %}checked{% endif %} onchange="this.form.submit()">
+                                <input type="radio" name="travel_style" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_travel_style %}checked{% endif %} onchange="this.form.submit()">
                                 <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">All Styles</span>
                             </label>
-                            {% for cat in categories %}
+                            {% for ts in travel_styles %}
                             <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="category" value="{{ cat.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_category == cat.slug %}checked{% endif %} onchange="this.form.submit()">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ cat.name }}</span>
+                                <input type="radio" name="travel_style" value="{{ ts.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_travel_style == ts.slug %}checked{% endif %} onchange="this.form.submit()">
+                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ ts.name }}</span>
                             </label>
                             {% endfor %}
                         </div>
@@ -72,7 +72,7 @@
         <div class="w-full lg:w-3/4">
             <div class="mb-6 flex items-center justify-between">
                 <p class="text-gray-600">Showing <span class="font-medium text-gray-900">{{ packages|length }}</span> packages</p>
-                {% if current_category or current_destination %}
+                {% if current_travel_style or current_destination %}
                 <a href="{{ url_for('public.packages_list') }}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">Clear All Filters</a>
                 {% endif %}
             </div>

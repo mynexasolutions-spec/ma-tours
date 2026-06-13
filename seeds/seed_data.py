@@ -12,12 +12,12 @@ Usage:
 
 from app.extensions import db
 from app.models.admin import Admin
-from app.models.category import Category
+from app.models.travel_style import TravelStyle
 from app.models.site_settings import SiteSettings
 
 
 def seed_categories():
-    """Seed default package categories."""
+    """Seed default travel styles."""
     categories = [
         {'name': 'Domestic', 'slug': 'domestic'},
         {'name': 'International', 'slug': 'international'},
@@ -28,13 +28,13 @@ def seed_categories():
     ]
 
     for cat_data in categories:
-        existing = Category.query.filter_by(slug=cat_data['slug']).first()
+        existing = TravelStyle.query.filter_by(slug=cat_data['slug']).first()
         if not existing:
-            category = Category(**cat_data)
+            category = TravelStyle(**cat_data)
             db.session.add(category)
-            print(f'  + Category: {cat_data["name"]}')
+            print(f'  + Travel Style: {cat_data["name"]}')
         else:
-            print(f'  - Category already exists: {cat_data["name"]}')
+            print(f'  - Travel Style already exists: {cat_data["name"]}')
 
     db.session.commit()
 

@@ -12,7 +12,7 @@ from app.models.package import (
 )
 from app.models.inquiry import Inquiry
 from app.models.destination import Destination
-from app.models.category import Category
+from app.models.travel_style import TravelStyle
 from app.models.testimonial import Testimonial
 from app.models.hero_slide import HeroSlide
 from app.models.announcement import Announcement
@@ -20,6 +20,7 @@ from app.models.gallery import GalleryCategory, GalleryImage
 from app.models.faq import FAQ
 from app.models.site_settings import SiteSettings
 from app.models.activity import Activity
+from app.models.activity_category import ActivityCategory
 from app.models.departure import PackageDeparture
 from app.utils import generate_slug
 
@@ -104,7 +105,20 @@ def destinations_add():
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
         description = request.form.get('description', '').strip()
-        hero_image_url = request.form.get('hero_image_url', '').strip()
+        
+        # Handle file upload
+        hero_image_url = None
+        file = request.files.get('hero_image')
+        if file and file.filename:
+            import os, uuid
+            from werkzeug.utils import secure_filename
+            filename = secure_filename(file.filename)
+            unique_filename = f"{uuid.uuid4().hex}_{filename}"
+            upload_folder = os.path.join(current_app.root_path, 'static', 'uploads', 'destinations')
+            os.makedirs(upload_folder, exist_ok=True)
+            file.save(os.path.join(upload_folder, unique_filename))
+            hero_image_url = url_for('static', filename=f'uploads/destinations/{unique_filename}')
+        is_international = request.form.get('is_international') == 'on'
         is_active = request.form.get('is_active') == 'on'
 
         if not name:
@@ -120,7 +134,9 @@ def destinations_add():
 
         destination = Destination(
             name=name, slug=slug, description=description,
-            hero_image_url=hero_image_url or None, is_active=is_active,
+            hero_image_url=hero_image_url or None, 
+            is_international=is_international,
+            is_active=is_active,
         )
         db.session.add(destination)
         db.session.commit()
@@ -143,7 +159,20 @@ def destinations_edit(id):
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
         description = request.form.get('description', '').strip()
-        hero_image_url = request.form.get('hero_image_url', '').strip()
+        
+        # Handle file upload
+        hero_image_url = destination.hero_image_url
+        file = request.files.get('hero_image')
+        if file and file.filename:
+            import os, uuid
+            from werkzeug.utils import secure_filename
+            filename = secure_filename(file.filename)
+            unique_filename = f"{uuid.uuid4().hex}_{filename}"
+            upload_folder = os.path.join(current_app.root_path, 'static', 'uploads', 'destinations')
+            os.makedirs(upload_folder, exist_ok=True)
+            file.save(os.path.join(upload_folder, unique_filename))
+            hero_image_url = url_for('static', filename=f'uploads/destinations/{unique_filename}')
+        is_international = request.form.get('is_international') == 'on'
         is_active = request.form.get('is_active') == 'on'
 
         if not name:
@@ -161,6 +190,7 @@ def destinations_edit(id):
         destination.name = name
         destination.description = description
         destination.hero_image_url = hero_image_url or None
+        destination.is_international = is_international
         destination.is_active = is_active
 
         db.session.commit()
@@ -202,13 +232,13 @@ def packages_list():
 def packages_add():
     """Add a new package."""
     destinations = Destination.query.filter_by(is_active=True).order_by(Destination.name).all()
-    categories = Category.query.order_by(Category.name).all()
+    travel_styles = TravelStyle.query.order_by(TravelStyle.name).all()
     activities = Activity.query.filter_by(is_active=True).order_by(Activity.name).all()
 
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
         destination_id = request.form.get('destination_id', '').strip()
-        category_ids = request.form.getlist('category_ids')
+        travel_style_ids = request.form.getlist('travel_style_ids')
         activity_ids = request.form.getlist('activity_ids')
         short_description = request.form.get('short_description', '').strip()
         description = request.form.get('description', '').strip()
@@ -224,14 +254,14 @@ def packages_add():
         if not title:
             flash('Package title is required.', 'error')
             return render_template('admin/packages/form.html', mode='add',
-                                   destinations=destinations, categories=categories, activities=activities)
+                                   destinations=destinations, travel_styles=travel_styles, activities=activities)
 
         slug = generate_slug(title)
         existing = Package.query.filter_by(slug=slug).first()
         if existing:
             flash(f'A package with slug "{slug}" already exists.', 'error')
             return render_template('admin/packages/form.html', mode='add',
-                                   destinations=destinations, categories=categories, activities=activities)
+                                   destinations=destinations, travel_styles=travel_styles, activities=activities)
 
         package = Package(
             title=title,
@@ -249,11 +279,11 @@ def packages_add():
             is_active=is_active,
         )
 
-        # Set categories
-        for cid in category_ids:
-            cat = db.session.get(Category, cid)
-            if cat:
-                package.categories.append(cat)
+        # Set travel styles
+        for cid in travel_style_ids:
+            ts = db.session.get(TravelStyle, cid)
+            if ts:
+                package.travel_styles.append(ts)
                 
         # Set activities
         for aid in activity_ids:
@@ -268,7 +298,7 @@ def packages_add():
         return redirect(url_for('admin.packages_edit', id=package.id))
 
     return render_template('admin/packages/form.html', mode='add',
-                           destinations=destinations, categories=categories, activities=activities)
+                           destinations=destinations, travel_styles=travel_styles, activities=activities)
 
 
 @admin_bp.route('/packages/<string:id>/edit', methods=['GET', 'POST'])
@@ -281,13 +311,13 @@ def packages_edit(id):
         return redirect(url_for('admin.packages_list'))
 
     destinations = Destination.query.filter_by(is_active=True).order_by(Destination.name).all()
-    categories = Category.query.order_by(Category.name).all()
+    travel_styles = TravelStyle.query.order_by(TravelStyle.name).all()
     activities = Activity.query.filter_by(is_active=True).order_by(Activity.name).all()
 
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
         destination_id = request.form.get('destination_id', '').strip()
-        category_ids = request.form.getlist('category_ids')
+        travel_style_ids = request.form.getlist('travel_style_ids')
         activity_ids = request.form.getlist('activity_ids')
         short_description = request.form.get('short_description', '').strip()
         description = request.form.get('description', '').strip()
@@ -303,7 +333,7 @@ def packages_edit(id):
         if not title:
             flash('Package title is required.', 'error')
             return render_template('admin/packages/edit.html', package=package,
-                                   destinations=destinations, categories=categories, activities=activities)
+                                   destinations=destinations, travel_styles=travel_styles, activities=activities)
 
         new_slug = generate_slug(title)
         if new_slug != package.slug:
@@ -311,7 +341,7 @@ def packages_edit(id):
             if existing:
                 flash(f'A package with slug "{new_slug}" already exists.', 'error')
                 return render_template('admin/packages/edit.html', package=package,
-                                       destinations=destinations, categories=categories, activities=activities)
+                                       destinations=destinations, travel_styles=travel_styles, activities=activities)
             package.slug = new_slug
 
         package.title = title
@@ -327,12 +357,12 @@ def packages_edit(id):
         package.is_featured = is_featured
         package.is_active = is_active
 
-        # Update categories
-        package.categories.clear()
-        for cid in category_ids:
-            cat = db.session.get(Category, cid)
-            if cat:
-                package.categories.append(cat)
+        # Update travel styles
+        package.travel_styles = []
+        for cid in travel_style_ids:
+            ts = db.session.get(TravelStyle, cid)
+            if ts:
+                package.travel_styles.append(ts)
                 
         # Update activities
         package.activities.clear()
@@ -346,7 +376,7 @@ def packages_edit(id):
         return redirect(url_for('admin.packages_edit', id=package.id))
 
     return render_template('admin/packages/edit.html', package=package,
-                           destinations=destinations, categories=categories)
+                           destinations=destinations, travel_styles=travel_styles)
 
 
 @admin_bp.route('/packages/<string:id>/toggle', methods=['POST'])
@@ -1080,6 +1110,20 @@ def faqs_move(id, direction):
     return redirect(url_for('admin.faqs_list'))
 
 
+@admin_bp.route('/faqs/<string:id>/delete', methods=['POST'])
+@login_required
+def faqs_delete(id):
+    """Delete a FAQ."""
+    faq = db.session.get(FAQ, id)
+    if faq:
+        db.session.delete(faq)
+        db.session.commit()
+        flash('FAQ deleted.', 'success')
+    else:
+        flash('FAQ not found.', 'error')
+    return redirect(url_for('admin.faqs_list'))
+
+
 # ─── Inquiries (Mini CRM) ───────────────────────────────────────
 
 @admin_bp.route('/inquiries')
@@ -1149,8 +1193,11 @@ def activities_list():
 @login_required
 def activities_add():
     """Add a new activity."""
+    categories = ActivityCategory.query.filter_by(is_active=True).order_by(ActivityCategory.name).all()
+
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
+        category_id = request.form.get('category_id') or None
         description = request.form.get('description', '').strip()
         image_url = request.form.get('image_url', '').strip()
         is_active = request.form.get('is_active') == 'on'
@@ -1177,7 +1224,7 @@ def activities_add():
         flash(f'Activity "{name}" added.', 'success')
         return redirect(url_for('admin.activities_list'))
 
-    return render_template('admin/activities/form.html', mode='add')
+    return render_template('admin/activities/form.html', mode='add', categories=categories)
 
 
 @admin_bp.route('/activities/<string:id>/edit', methods=['GET', 'POST'])
@@ -1189,25 +1236,29 @@ def activities_edit(id):
         flash('Activity not found.', 'error')
         return redirect(url_for('admin.activities_list'))
 
+    categories = ActivityCategory.query.filter_by(is_active=True).order_by(ActivityCategory.name).all()
+
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
+        category_id = request.form.get('category_id') or None
         description = request.form.get('description', '').strip()
         image_url = request.form.get('image_url', '').strip()
         is_active = request.form.get('is_active') == 'on'
 
         if not name:
             flash('Activity name is required.', 'error')
-            return render_template('admin/activities/form.html', mode='edit', activity=activity)
+            return render_template('admin/activities/form.html', mode='edit', activity=activity, categories=categories)
 
         new_slug = generate_slug(name)
         if new_slug != activity.slug:
             existing = Activity.query.filter_by(slug=new_slug).first()
             if existing:
                 flash(f'An activity with slug "{new_slug}" already exists.', 'error')
-                return render_template('admin/activities/form.html', mode='edit', activity=activity)
+                return render_template('admin/activities/form.html', mode='edit', activity=activity, categories=categories)
             activity.slug = new_slug
 
         activity.name = name
+        activity.category_id = category_id
         activity.description = description or None
         activity.image_url = image_url or None
         activity.is_active = is_active
@@ -1216,7 +1267,7 @@ def activities_edit(id):
         flash(f'Activity "{name}" updated.', 'success')
         return redirect(url_for('admin.activities_list'))
 
-    return render_template('admin/activities/form.html', mode='edit', activity=activity)
+    return render_template('admin/activities/form.html', mode='edit', activity=activity, categories=categories)
 
 
 @admin_bp.route('/activities/<string:id>/toggle', methods=['POST'])
@@ -1310,3 +1361,106 @@ def site_settings():
         return redirect(url_for('admin.site_settings'))
         
     return render_template('admin/settings/form.html', settings=settings)
+
+
+# ==========================================
+# ACTIVITY CATEGORIES
+# ==========================================
+
+@admin_bp.route('/activity-categories')
+@login_required
+def activity_categories_list():
+    """List all activity categories."""
+    categories = ActivityCategory.query.order_by(ActivityCategory.display_order, ActivityCategory.name).all()
+    return render_template('admin/activity_categories/list.html', categories=categories)
+
+
+@admin_bp.route('/activity-categories/add', methods=['GET', 'POST'])
+@login_required
+def activity_categories_add():
+    """Add a new activity category."""
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        description = request.form.get('description', '').strip()
+        image_url = request.form.get('image_url', '').strip()
+        display_order = request.form.get('display_order', type=int, default=0)
+        is_active = request.form.get('is_active') == 'on'
+
+        if not name:
+            flash('Category name is required.', 'error')
+            return render_template('admin/activity_categories/form.html', mode='add')
+
+        slug = generate_slug(name)
+        existing = ActivityCategory.query.filter_by(slug=slug).first()
+        if existing:
+            flash(f'An activity category with slug "{slug}" already exists.', 'error')
+            return render_template('admin/activity_categories/form.html', mode='add')
+
+        category = ActivityCategory(
+            name=name,
+            slug=slug,
+            description=description,
+            image_url=image_url,
+            display_order=display_order,
+            is_active=is_active
+        )
+        db.session.add(category)
+        db.session.commit()
+        flash('Activity category added successfully.', 'success')
+        return redirect(url_for('admin.activity_categories_list'))
+
+    return render_template('admin/activity_categories/form.html', mode='add')
+
+
+@admin_bp.route('/activity-categories/<string:id>/edit', methods=['GET', 'POST'])
+@login_required
+def activity_categories_edit(id):
+    """Edit an existing activity category."""
+    category = db.session.get(ActivityCategory, id)
+    if not category:
+        flash('Activity category not found.', 'error')
+        return redirect(url_for('admin.activity_categories_list'))
+
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        description = request.form.get('description', '').strip()
+        image_url = request.form.get('image_url', '').strip()
+        display_order = request.form.get('display_order', type=int, default=0)
+        is_active = request.form.get('is_active') == 'on'
+
+        if not name:
+            flash('Category name is required.', 'error')
+            return render_template('admin/activity_categories/form.html', mode='edit', category=category)
+
+        new_slug = generate_slug(name)
+        if new_slug != category.slug:
+            existing = ActivityCategory.query.filter_by(slug=new_slug).first()
+            if existing:
+                flash(f'An activity category with slug "{new_slug}" already exists.', 'error')
+                return render_template('admin/activity_categories/form.html', mode='edit', category=category)
+            category.slug = new_slug
+
+        category.name = name
+        category.description = description
+        category.image_url = image_url
+        category.display_order = display_order
+        category.is_active = is_active
+
+        db.session.commit()
+        flash('Activity category updated successfully.', 'success')
+        return redirect(url_for('admin.activity_categories_list'))
+
+    return render_template('admin/activity_categories/form.html', mode='edit', category=category)
+
+
+@admin_bp.route('/activity-categories/<string:id>/toggle', methods=['POST'])
+@login_required
+def activity_categories_toggle(id):
+    """Toggle activity category active status."""
+    category = db.session.get(ActivityCategory, id)
+    if category:
+        category.is_active = not category.is_active
+        db.session.commit()
+        status = 'activated' if category.is_active else 'deactivated'
+        flash(f'Category {status}.', 'success')
+    return redirect(url_for('admin.activity_categories_list'))

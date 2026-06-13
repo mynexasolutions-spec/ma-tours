@@ -48,7 +48,14 @@
                             </div>
                             {% endif %}
                             <div>
-                                <span class="font-semibold text-gray-800">{{ dest.name }}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold text-gray-800">{{ dest.name }}</span>
+                                    {% if dest.is_international %}
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100">International</span>
+                                    {% else %}
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Domestic</span>
+                                    {% endif %}
+                                </div>
                                 {% if dest.description %}
                                 <p class="text-xs text-gray-400 mt-0.5 max-w-xs truncate">{{ dest.description }}</p>
                                 {% endif %}

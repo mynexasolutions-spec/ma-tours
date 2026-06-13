@@ -11,6 +11,7 @@ class Destination(db.Model):
     slug = db.Column(db.String(120), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=True)
     hero_image_url = db.Column(db.String(500), nullable=True)
+    is_international = db.Column(db.Boolean, default=False, server_default='0', nullable=False)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
