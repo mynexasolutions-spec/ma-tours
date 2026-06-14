@@ -66,7 +66,7 @@ def run_mock_seeds():
     print("Adding Packages...")
     srinagar_id = Destination.query.filter_by(slug='srinagar').first().id
     style_id = TravelStyle.query.filter_by(slug='domestic').first().id
-    p1 = Package(title="Majestic Kashmir Tour", slug="majestic-kashmir", destination_id=srinagar_id, price=15000, duration_days=5, duration_nights=4, overview="A beautiful 5-day tour covering Srinagar, Gulmarg, and Pahalgam with houseboat stays.", itinary="Day 1: Arrival in Srinagar. Day 2: Srinagar local sightseeing. Day 3: Excursion to Gulmarg. Day 4: Excursion to Pahalgam. Day 5: Departure.", inclusions="Hotel, Breakfast, Dinner, Transport, Shikara Ride", exclusions="Flights, Personal expenses, Entry tickets")
+    p1 = Package(title="Majestic Kashmir Tour", slug="majestic-kashmir", destination_id=srinagar_id, price_from=15000, duration_days=5, duration_nights=4, short_description="A beautiful 5-day tour covering Srinagar, Gulmarg, and Pahalgam with houseboat stays.", description="Detailed itinerary goes here.")
     
     if not Package.query.filter_by(slug=p1.slug).first():
         db.session.add(p1)
