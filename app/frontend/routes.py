@@ -45,7 +45,7 @@ def home():
     # Fetch top 8 homepage gallery images
     homepage_gallery = HomepageGalleryImage.query.filter_by(is_active=True).order_by(HomepageGalleryImage.display_order).limit(8).all()
     
-    return render_template('public/home.html', 
+    return render_template('frontend/home.html', 
                            hero_slides=hero_slides,
                            announcement=announcement,
                            packages=packages,
@@ -101,7 +101,7 @@ def submit_inquiry():
 def about():
     """About Us page."""
     settings = SiteSettings.query.first()
-    return render_template('public/about.html', settings=settings)
+    return render_template('frontend/about.html', settings=settings)
 
 
 @public_bp.route('/packages')
@@ -124,7 +124,7 @@ def packages_list():
     destinations = Destination.query.filter_by(is_active=True).all()
     settings = SiteSettings.query.first()
     
-    return render_template('public/packages/list.html', 
+    return render_template('frontend/packages/list.html', 
                            packages=packages, 
                            travel_styles=travel_styles, 
                            destinations=destinations,
@@ -146,7 +146,7 @@ def package_detail(slug):
     
     settings = SiteSettings.query.first()
     
-    return render_template('public/packages/detail.html', 
+    return render_template('frontend/packages/detail.html', 
                            package=package, 
                            related_packages=related_packages,
                            settings=settings)
@@ -156,7 +156,7 @@ def package_detail(slug):
 def services():
     """Services page."""
     settings = SiteSettings.query.first()
-    return render_template('public/services.html', settings=settings)
+    return render_template('frontend/services.html', settings=settings)
 
 
 @public_bp.route('/gallery')
@@ -165,28 +165,28 @@ def gallery():
     categories = GalleryCategory.query.all()
     images = GalleryImage.query.filter_by(is_active=True).order_by(GalleryImage.display_order).all()
     settings = SiteSettings.query.first()
-    return render_template('public/gallery.html', categories=categories, images=images, settings=settings)
+    return render_template('frontend/gallery.html', categories=categories, images=images, settings=settings)
 
 
 @public_bp.route('/contact')
 def contact():
     """Contact page."""
     settings = SiteSettings.query.first()
-    return render_template('public/contact.html', settings=settings)
+    return render_template('frontend/contact.html', settings=settings)
 
 
 @public_bp.route('/privacy-policy')
 def privacy_policy():
     """Privacy Policy page."""
     settings = SiteSettings.query.first()
-    return render_template('public/legal/privacy.html', settings=settings)
+    return render_template('frontend/legal/privacy.html', settings=settings)
 
 
 @public_bp.route('/terms')
 def terms():
     """Terms & Conditions page."""
     settings = SiteSettings.query.first()
-    return render_template('public/legal/terms.html', settings=settings)
+    return render_template('frontend/legal/terms.html', settings=settings)
 
 
 @public_bp.route('/destinations')
@@ -195,7 +195,7 @@ def destinations_list():
     domestic_destinations = Destination.query.filter_by(is_active=True, is_international=False).all()
     international_destinations = Destination.query.filter_by(is_active=True, is_international=True).all()
     settings = SiteSettings.query.first()
-    return render_template('public/destinations/list.html', 
+    return render_template('frontend/destinations/list.html', 
                            domestic_destinations=domestic_destinations, 
                            international_destinations=international_destinations, 
                            settings=settings)
@@ -207,7 +207,7 @@ def destination_detail(slug):
     destination = Destination.query.filter_by(slug=slug, is_active=True).first_or_404()
     packages = Package.query.filter_by(destination_id=destination.id, is_active=True).order_by(Package.created_at.desc()).all()
     settings = SiteSettings.query.first()
-    return render_template('public/destinations/detail.html', destination=destination, packages=packages, settings=settings)
+    return render_template('frontend/destinations/detail.html', destination=destination, packages=packages, settings=settings)
 
 
 @public_bp.route('/activities')
@@ -217,7 +217,7 @@ def activities_list():
     # Uncategorized activities
     uncategorized = Activity.query.filter_by(is_active=True, category_id=None).all()
     settings = SiteSettings.query.first()
-    return render_template('public/activities/list.html', categories=categories, uncategorized=uncategorized, settings=settings)
+    return render_template('frontend/activities/list.html', categories=categories, uncategorized=uncategorized, settings=settings)
 
 
 @public_bp.route('/activities/<slug>')
@@ -226,4 +226,4 @@ def activity_detail(slug):
     activity = Activity.query.filter_by(slug=slug, is_active=True).first_or_404()
     packages = Package.query.join(Package.activities).filter(Activity.id == activity.id, Package.is_active == True).order_by(Package.created_at.desc()).all()
     settings = SiteSettings.query.first()
-    return render_template('public/activities/detail.html', activity=activity, packages=packages, settings=settings)
+    return render_template('frontend/activities/detail.html', activity=activity, packages=packages, settings=settings)

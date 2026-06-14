@@ -87,14 +87,14 @@
 </head>
 <body class="flex flex-col min-h-screen text-gray-800 bg-white antialiased">
 
-    {% include 'public/partials/navbar.html' %}
+    {% include 'frontend/partials/navbar.html' %}
 
     <!-- Main Content -->
     <main class="flex-grow {% if not is_transparent_nav %}pt-24{% endif %} {% block main_class %}{% endblock %}">
         {% block content %}{% endblock %}
     </main>
 
-    {% include 'public/partials/footer.html' %}
+    {% include 'frontend/partials/footer.html' %}
 
     <!-- Vue App Initialization for Layout -->
     <script>
