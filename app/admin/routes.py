@@ -4,6 +4,10 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 
+from slugify import slugify
+import cloudinary
+import cloudinary.uploader
+
 from app.admin import admin_bp
 from app.extensions import db
 from app.models.package import (
@@ -550,6 +554,77 @@ def package_itinerary_delete(pkg_id, t_id):
 
 # ─── Package Images ─────────────────────────────────────────────
 
+@admin_bp.route('/packages/<string:id>/gallery', methods=['GET', 'POST'])
+@login_required
+def package_gallery(id):
+    """Manage gallery images for a package."""
+    package = db.session.get(Package, id)
+    if not package:
+        flash('Package not found.', 'error')
+        return redirect(url_for('admin.packages_list'))
+
+    if request.method == 'POST':
+        if 'image_file' not in request.files:
+            flash('No image file provided.', 'error')
+            return redirect(url_for('admin.package_gallery', id=id))
+            
+        file = request.files['image_file']
+        if file.filename == '':
+            flash('No selected file.', 'error')
+            return redirect(url_for('admin.package_gallery', id=id))
+
+        try:
+            # Cloudinary automatically uses CLOUDINARY_URL environment variable
+            upload_result = cloudinary.uploader.upload(file, folder="ma_tours/packages")
+            image_url = upload_result.get('secure_url')
+            
+            if image_url:
+                max_order = db.session.query(db.func.max(PackageImage.display_order)).filter_by(package_id=id).scalar() or 0
+                image = PackageImage(package_id=id, image_url=image_url, display_order=max_order + 1)
+                db.session.add(image)
+                db.session.commit()
+                flash('Image uploaded successfully.', 'success')
+        except Exception as e:
+            flash(f'Error uploading image: {str(e)}', 'error')
+            
+        return redirect(url_for('admin.package_gallery', id=id))
+
+    return render_template('admin/packages/gallery.html', package=package)
+
+
+@admin_bp.route('/packages/<string:package_id>/images/<string:image_id>/move/<string:direction>', methods=['POST'])
+@login_required
+def package_image_move(package_id, image_id, direction):
+    """Move a package image up or down in display order."""
+    image = db.session.get(PackageImage, image_id)
+    if not image or image.package_id != package_id:
+        flash('Image not found.', 'error')
+        return redirect(url_for('admin.package_gallery', id=package_id))
+
+    current_order = image.display_order
+    
+    if direction == 'up':
+        swap_image = PackageImage.query.filter(
+            PackageImage.package_id == package_id,
+            PackageImage.display_order < current_order
+        ).order_by(PackageImage.display_order.desc()).first()
+    elif direction == 'down':
+        swap_image = PackageImage.query.filter(
+            PackageImage.package_id == package_id,
+            PackageImage.display_order > current_order
+        ).order_by(PackageImage.display_order.asc()).first()
+    else:
+        swap_image = None
+
+    if swap_image:
+        # Swap orders
+        image.display_order, swap_image.display_order = swap_image.display_order, image.display_order
+        db.session.commit()
+        flash('Image order updated.', 'success')
+
+    return redirect(url_for('admin.package_gallery', id=package_id))
+
+
 @admin_bp.route('/packages/<string:id>/images/add', methods=['POST'])
 @login_required
 def package_image_add(id):
@@ -582,7 +657,9 @@ def package_image_delete(pkg_id, img_id):
         db.session.commit()
         flash('Image removed.', 'success')
 
-    return redirect(url_for('admin.packages_edit', id=pkg_id) + '#images')
+    # Redirect to referrer so it works from both gallery and edit page
+    referrer = request.referrer or url_for('admin.packages_edit', id=pkg_id) + '#images'
+    return redirect(referrer)
 
 
 # ─── Hero Slides ────────────────────────────────────────────────
