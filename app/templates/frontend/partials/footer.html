@@ -5,7 +5,7 @@
                 <!-- Brand -->
                 <div class="space-y-4 flex flex-col items-center text-center md:items-start md:text-left">
                     <a href="{{ url_for('public.home') }}" class="block">
-                        <img src="{{ url_for('static', filename='white-name-svg.svg') }}" alt="M A Tours And Travels" class="h-14 w-auto" />
+                        <img src="{{ url_for('static', filename='white-name-svg.svg') }}" alt="M A Tours And Travels" class="h-20 w-auto" />
                     </a>
                     <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
                         Crafting unforgettable travel experiences in the heart of Kashmir. Your gateway to the paradise on earth.
@@ -28,6 +28,8 @@
                     <ul class="space-y-3 text-sm text-gray-400">
                         <li><a href="{{ url_for('public.home') }}" class="hover:text-primary-400 transition-colors">Home</a></li>
                         <li><a href="{{ url_for('public.packages_list') }}" class="hover:text-primary-400 transition-colors">Tours & Packages</a></li>
+                        <li><a href="{{ url_for('public.destinations_list') }}" class="hover:text-primary-400 transition-colors">Destinations</a></li>
+                        <li><a href="{{ url_for('public.activities_list') }}" class="hover:text-primary-400 transition-colors">Activities</a></li>
                         <li><a href="{{ url_for('public.about') }}" class="hover:text-primary-400 transition-colors">About Us</a></li>
                         <li><a href="{{ url_for('public.services') }}" class="hover:text-primary-400 transition-colors">Our Services</a></li>
                         <li><a href="{{ url_for('public.gallery') }}" class="hover:text-primary-400 transition-colors">Gallery</a></li>
@@ -67,9 +69,6 @@
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-sm text-gray-500">
                     &copy; 2026 M.A. Tours & Travels. All rights reserved.
-                </p>
-                <p class="text-sm text-gray-500 flex items-center gap-1">
-                    Made with <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg> in Kashmir
                 </p>
             </div>
         </div>
