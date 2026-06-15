@@ -280,8 +280,8 @@ def packages_add():
         db.session.add(package)
         db.session.commit()
 
-        flash(f'Package "{title}" created. Now add highlights, itinerary, and images.', 'success')
-        return redirect(url_for('admin.packages_edit', id=package.id))
+        flash(f'Package "{title}" created successfully.', 'success')
+        return redirect(url_for('admin.packages_list'))
 
     return render_template('admin/packages/form.html', mode='add',
                            destinations=destinations, travel_styles=travel_styles, activities=activities)
@@ -359,7 +359,7 @@ def packages_edit(id):
 
         db.session.commit()
         flash(f'Package "{title}" updated successfully.', 'success')
-        return redirect(url_for('admin.packages_edit', id=package.id))
+        return redirect(url_for('admin.packages_list'))
 
     return render_template('admin/packages/edit.html', package=package,
                            destinations=destinations, travel_styles=travel_styles)
@@ -1604,6 +1604,21 @@ def activity_categories_toggle(id):
         db.session.commit()
         status = 'activated' if category.is_active else 'deactivated'
         flash(f'Category {status}.', 'success')
+    return redirect(url_for('admin.activity_categories_list'))
+
+
+@admin_bp.route('/activity-categories/<string:id>/delete', methods=['POST'])
+@login_required
+def activity_categories_delete(id):
+    """Delete an activity category."""
+    category = db.session.get(ActivityCategory, id)
+    if category:
+        name = category.name
+        db.session.delete(category)
+        db.session.commit()
+        flash(f'Activity category "{name}" deleted successfully.', 'success')
+    else:
+        flash('Activity category not found.', 'error')
     return redirect(url_for('admin.activity_categories_list'))
 
 

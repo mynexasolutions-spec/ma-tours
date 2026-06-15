@@ -9,7 +9,7 @@
 <!-- Hero Header -->
 <div class="relative bg-gray-900 py-24 sm:py-32 overflow-hidden">
     <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1544391694-a2b1f8eb4f7e?auto=format&fit=crop&q=80&w=2070" alt="Dal Lake Kashmir" class="w-full h-full object-cover opacity-40">
+        <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&q=80&w=2070" alt="Travel Landscape" class="w-full h-full object-cover opacity-40">
         <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
     </div>
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
@@ -21,19 +21,19 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
     <!-- Our Story Section -->
     <div class="flex flex-col lg:flex-row items-center gap-16 mb-24">
-        <div class="w-full lg:w-1/2 relative">
-            <div class="absolute -inset-4 bg-primary-100 rounded-2xl transform rotate-3 z-0"></div>
-            <img src="https://images.unsplash.com/photo-1588661642147-320e8b1b22e1?auto=format&fit=crop&q=80&w=1000" alt="Kashmir Landscape" class="relative z-10 w-full h-auto rounded-2xl shadow-xl">
+        <div class="w-full lg:w-1/2 relative flex items-center justify-center p-8 bg-white border border-gray-100 rounded-2xl shadow-xl min-h-[350px]">
+            <div class="absolute -inset-4 bg-primary-100 rounded-2xl transform rotate-3 -z-10"></div>
+            <img src="{{ url_for('static', filename='logo-svg.svg') }}" alt="M A Tours & Travels Logo" class="max-w-[80%] h-auto object-contain transition-transform duration-500 hover:scale-105">
         </div>
         <div class="w-full lg:w-1/2">
             <h2 class="text-primary-600 font-bold tracking-wider uppercase text-sm mb-2">Our Story</h2>
-            <h3 class="text-3xl md:text-4xl font-bold font-serif text-gray-900 mb-6">Born from a love for the valley</h3>
+            <h3 class="text-3xl md:text-4xl font-bold font-serif text-gray-900 mb-6">From Mumbai to the World</h3>
             <div class="prose prose-lg text-gray-600">
                 <p>
-                    M.A. Tours & Travels was founded with a singular vision: to share the unparalleled beauty, rich culture, and warm hospitality of Kashmir with the world. We don't just offer tours; we offer authentic experiences curated by locals who know every hidden gem of the valley.
+                    Based in the heart of Mumbai, M.A. Tours & Travels was founded with a passion to connect travelers with the most beautiful corners of the world. What started as a dedicated agency curating exceptional journeys to Kashmir has evolved into a full-service travel partner offering curated holiday packages across India and top international destinations.
                 </p>
                 <p>
-                    Over the years, we have grown from a small passionate team into one of the most trusted travel agencies in the region, helping thousands of families, couples, and adventurers create stories that last a lifetime.
+                    We believe that travel is not just about visiting new places, but about the seamless and joyful memories you make. From our base in Mumbai, we leverage direct partnerships with premium hotels and transport providers to deliver highly customized, reliable, and premium holiday itineraries tailored to every customer’s dream.
                 </p>
             </div>
         </div>
@@ -42,35 +42,74 @@
     <!-- Why Choose Us Grid -->
     <div class="text-center mb-16">
         <h2 class="text-primary-600 font-bold tracking-wider uppercase text-sm mb-2">The M.A. Difference</h2>
-        <h3 class="text-3xl font-bold font-serif text-gray-900">Why Travel With Us</h3>
+        <h3 class="text-3xl font-bold font-serif text-gray-900">Why Choose M A Tours & Travels?</h3>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
         <!-- Feature 1 -->
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow">
-            <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary-600">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <div class="flex items-start gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 duration-300">
+            <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
             </div>
-            <h4 class="text-xl font-bold text-gray-900 mb-3">Trusted & Verified</h4>
-            <p class="text-gray-600">Registered and highly rated. We ensure your safety and comfort at every step of the journey.</p>
+            <div>
+                <h4 class="text-lg font-bold text-gray-900 mb-1">Trusted Travel Partner</h4>
+                <p class="text-sm text-gray-600">A registered, reliable agency catering to thousands of happy vacationers.</p>
+            </div>
         </div>
         
         <!-- Feature 2 -->
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow">
-            <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary-600">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+        <div class="flex items-start gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 duration-300">
+            <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
             </div>
-            <h4 class="text-xl font-bold text-gray-900 mb-3">Premium Quality</h4>
-            <p class="text-gray-600">From luxury houseboats to 4-star resorts, we partner only with the best to give you a premium experience.</p>
+            <div>
+                <h4 class="text-lg font-bold text-gray-900 mb-1">Competitive Pricing</h4>
+                <p class="text-sm text-gray-600">Enjoy transparent quotes, premium stays, and direct-rate transfers without markup.</p>
+            </div>
         </div>
         
         <!-- Feature 3 -->
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow">
-            <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary-600">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="flex items-start gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 duration-300">
+            <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
             </div>
-            <h4 class="text-xl font-bold text-gray-900 mb-3">24/7 Support</h4>
-            <p class="text-gray-600">Our dedicated team is available round the clock during your trip to assist you with anything you need.</p>
+            <div>
+                <h4 class="text-lg font-bold text-gray-900 mb-1">Personalized Travel Solutions</h4>
+                <p class="text-sm text-gray-600">100% customizable itineraries designed to match your specific timeline and style.</p>
+            </div>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="flex items-start gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 duration-300">
+            <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold text-gray-900 mb-1">Dedicated Customer Support</h4>
+                <p class="text-sm text-gray-600">Our support staff is available round-the-clock during your entire trip duration.</p>
+            </div>
+        </div>
+        
+        <!-- Feature 5 -->
+        <div class="flex items-start gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 duration-300">
+            <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold text-gray-900 mb-1">Hassle-Free Booking Experience</h4>
+                <p class="text-sm text-gray-600">Seamless coordination of flights, transfers, accommodation, and entry vouchers.</p>
+            </div>
+        </div>
+        
+        <!-- Feature 6 -->
+        <div class="flex items-start gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 duration-300">
+            <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold text-gray-900 mb-1">Experienced Travel Consultants</h4>
+                <p class="text-sm text-gray-600">Expert guidance on destinations, travel routes, visa processes, and seasonality details.</p>
+            </div>
         </div>
     </div>
 </div>
