@@ -512,9 +512,14 @@
         </div>
     </div>
 
-    <div class="w-full relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="w-full relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto group/shorts">
+        <!-- Carousel Navigation Arrows -->
+        <button id="shorts-prev-btn" class="absolute left-1 sm:left-4 top-[calc(50%-2rem)] -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border border-gray-200 shadow-md text-gray-700 hover:text-primary-600 hover:scale-105 transition-all duration-300 flex items-center justify-center z-20 focus:outline-none opacity-100 md:opacity-0 md:group-hover/shorts:opacity-100 transition-opacity" title="Previous shorts">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+
         <!-- Horizontal Scroll Container -->
-        <div class="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scrollbar style-shorts-scroll">
+        <div id="shorts-scroll-container" class="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scrollbar style-shorts-scroll scroll-smooth">
             {% for short in youtube_shorts %}
             <div class="snap-center shrink-0 w-[280px] sm:w-[320px] bg-white rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2 group">
                 <div class="relative w-full aspect-[9/16] bg-gray-900 group">
@@ -538,6 +543,11 @@
             </div>
             {% endfor %}
         </div>
+
+        <!-- Right Arrow -->
+        <button id="shorts-next-btn" class="absolute right-1 sm:right-4 top-[calc(50%-2rem)] -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border border-gray-200 shadow-md text-gray-700 hover:text-primary-600 hover:scale-105 transition-all duration-300 flex items-center justify-center z-20 focus:outline-none opacity-100 md:opacity-0 md:group-hover/shorts:opacity-100 transition-opacity" title="Next shorts">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
     </div>
 </section>
 
@@ -586,6 +596,72 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Carousel Navigation Logic for Shorts
+    const scrollContainer = document.getElementById('shorts-scroll-container');
+    const prevBtn = document.getElementById('shorts-prev-btn');
+    const nextBtn = document.getElementById('shorts-next-btn');
+
+    if (scrollContainer && prevBtn && nextBtn) {
+        const getScrollAmount = () => {
+            const firstCard = scrollContainer.firstElementChild;
+            if (firstCard) {
+                const cardWidth = firstCard.offsetWidth + 24; // Card width + gap-6 (24px)
+                const visibleWidth = scrollContainer.clientWidth;
+                if (visibleWidth > cardWidth * 2) {
+                    return Math.floor(visibleWidth / cardWidth) * cardWidth;
+                }
+                return cardWidth;
+            }
+            return 300;
+        };
+
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            scrollContainer.scrollBy({
+                left: -getScrollAmount(),
+                behavior: 'smooth'
+            });
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            scrollContainer.scrollBy({
+                left: getScrollAmount(),
+                behavior: 'smooth'
+            });
+        });
+
+        const toggleArrows = () => {
+            const scrollLeft = scrollContainer.scrollLeft;
+            const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+            if (scrollLeft <= 5) {
+                prevBtn.style.pointerEvents = 'none';
+                prevBtn.style.opacity = '0';
+            } else {
+                prevBtn.style.pointerEvents = 'auto';
+                prevBtn.style.opacity = '';
+            }
+
+            if (scrollLeft >= maxScrollLeft - 5) {
+                nextBtn.style.pointerEvents = 'none';
+                nextBtn.style.opacity = '0';
+            } else {
+                nextBtn.style.pointerEvents = 'auto';
+                nextBtn.style.opacity = '';
+            }
+        };
+
+        scrollContainer.addEventListener('scroll', toggleArrows);
+        window.addEventListener('resize', toggleArrows);
+        window.addEventListener('load', toggleArrows);
+        
+        // Initial setup and fallback timeout checks to account for late font/image loading
+        toggleArrows();
+        setTimeout(toggleArrows, 100);
+        setTimeout(toggleArrows, 500);
+    }
 });
 </script>
 {% endif %}

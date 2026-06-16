@@ -22,49 +22,67 @@
         
         <!-- Filters Sidebar -->
         <aside class="w-full lg:w-1/4 flex-shrink-0">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
-                <h2 class="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-                    Filter Packages
-                </h2>
-                
-                <form method="GET" action="{{ url_for('public.packages_list') }}" class="space-y-6">
-                    <!-- Destination Filter -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-3">Destination</label>
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="destination" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_destination %}checked{% endif %} onchange="this.form.submit()">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">All Destinations</span>
-                            </label>
-                            {% for dest in destinations %}
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="destination" value="{{ dest.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_destination == dest.slug %}checked{% endif %} onchange="this.form.submit()">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ dest.name }}</span>
-                            </label>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                    <div class="h-px bg-gray-100"></div>
+            <!-- Mobile Toggle Button -->
+            <div class="lg:hidden mb-4">
+                <button id="filter-toggle-btn" class="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-700 font-semibold text-sm hover:bg-gray-50 shadow-sm transition-all focus:outline-none w-full justify-between">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4.5 h-4.5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        Filter Packages
+                        {% set active_count = (1 if current_destination else 0) + (1 if current_travel_style else 0) %}
+                        {% if active_count > 0 %}
+                        <span class="bg-primary-100 text-primary-800 text-xs font-semibold px-2 py-0.5 rounded-full">{{ active_count }}</span>
+                        {% endif %}
+                    </span>
+                    <svg id="filter-arrow" class="w-4 h-4 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+            </div>
 
-                    <!-- Travel Style Filter -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-3">Travel Style</label>
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="travel_style" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_travel_style %}checked{% endif %} onchange="this.form.submit()">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">All Styles</span>
-                            </label>
-                            {% for ts in travel_styles %}
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="travel_style" value="{{ ts.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_travel_style == ts.slug %}checked{% endif %} onchange="this.form.submit()">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ ts.name }}</span>
-                            </label>
-                            {% endfor %}
+            <!-- Filter Content (Collapsible on Mobile, Permanent on Desktop) -->
+            <div id="filter-content-wrapper" class="overflow-hidden max-h-0 opacity-0 transition-all duration-300 lg:max-h-none lg:opacity-100 lg:overflow-visible">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24 mb-6 lg:mb-0">
+                    <h2 class="hidden lg:flex text-lg font-bold text-gray-900 mb-6 items-center gap-2">
+                        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        Filter Packages
+                    </h2>
+                    
+                    <form method="GET" action="{{ url_for('public.packages_list') }}" class="space-y-6">
+                        <!-- Destination Filter -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Destination</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="radio" name="destination" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_destination %}checked{% endif %} onchange="this.form.submit()">
+                                    <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">All Destinations</span>
+                                </label>
+                                {% for dest in destinations %}
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="radio" name="destination" value="{{ dest.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_destination == dest.slug %}checked{% endif %} onchange="this.form.submit()">
+                                    <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ dest.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                </form>
+                        
+                        <div class="h-px bg-gray-100"></div>
+
+                        <!-- Travel Style Filter -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Travel Style</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="radio" name="travel_style" value="" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if not current_travel_style %}checked{% endif %} onchange="this.form.submit()">
+                                    <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">All Styles</span>
+                                </label>
+                                {% for ts in travel_styles %}
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="radio" name="travel_style" value="{{ ts.slug }}" class="text-primary-600 focus:ring-primary-500 rounded-full" {% if current_travel_style == ts.slug %}checked{% endif %} onchange="this.form.submit()">
+                                    <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ ts.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </aside>
 
@@ -136,4 +154,65 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    (function() {
+        function initFilters() {
+            const toggleBtn = document.getElementById('filter-toggle-btn');
+            const contentWrapper = document.getElementById('filter-content-wrapper');
+            const arrow = document.getElementById('filter-arrow');
+
+            console.log('initFilters check:', { toggleBtn, contentWrapper, arrow });
+
+            if (!toggleBtn || !contentWrapper) {
+                console.warn('initFilters: toggleBtn or contentWrapper not found in DOM.');
+                return;
+            }
+
+            // Calculate active filters from context directly (Jinja block variable scoping workaround)
+            const currentDest = '{{ current_destination or "" }}';
+            const currentStyle = '{{ current_travel_style or "" }}';
+            const activeCount = (currentDest ? 1 : 0) + (currentStyle ? 1 : 0);
+
+            console.log('initFilters params:', { currentDest, currentStyle, activeCount, windowWidth: window.innerWidth });
+
+            // Keep open on mobile if filters are actively selected on load
+            if (activeCount > 0 && window.innerWidth < 1024) {
+                console.log('initFilters: auto-opening due to active filters');
+                contentWrapper.style.maxHeight = contentWrapper.scrollHeight + 'px';
+                contentWrapper.style.opacity = '1';
+                if (arrow) arrow.classList.add('rotate-180');
+            }
+
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('initFilters: Toggle button clicked!');
+                const isOpen = contentWrapper.style.maxHeight && contentWrapper.style.maxHeight !== '0px';
+                console.log('initFilters: Click state:', { isOpen, currentMaxHeight: contentWrapper.style.maxHeight, scrollHeight: contentWrapper.scrollHeight });
+                
+                if (isOpen) {
+                    contentWrapper.style.maxHeight = '0px';
+                    contentWrapper.style.opacity = '0';
+                    if (arrow) arrow.classList.remove('rotate-180');
+                    console.log('initFilters: closed filters.');
+                } else {
+                    const targetHeight = contentWrapper.scrollHeight + 'px';
+                    contentWrapper.style.maxHeight = targetHeight;
+                    contentWrapper.style.opacity = '1';
+                    if (arrow) arrow.classList.add('rotate-180');
+                    console.log('initFilters: opened filters to height:', targetHeight);
+                }
+            });
+        }
+
+        console.log('initFilters script loaded. document.readyState:', document.readyState);
+        if (document.readyState !== 'loading') {
+            initFilters();
+        } else {
+            document.addEventListener('DOMContentLoaded', initFilters);
+        }
+    })();
+</script>
 {% endblock %}
