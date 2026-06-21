@@ -87,6 +87,29 @@
         @view-transition {
           navigation: auto;
         }
+
+        /* Premium Scroll Reveal (Option B: Clip-Path Reveal) */
+        .reveal-clip {
+          opacity: 0;
+          clip-path: inset(15% 0 15% 0);
+          transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: clip-path, opacity;
+        }
+        .reveal-clip.revealed {
+          opacity: 1;
+          clip-path: inset(0% 0 0% 0);
+        }
+
+        .reveal-clip-right {
+          opacity: 0;
+          clip-path: inset(0 100% 0 0);
+          transition: clip-path 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: clip-path, opacity;
+        }
+        .reveal-clip-right.revealed {
+          opacity: 1;
+          clip-path: inset(0 0% 0 0);
+        }
     </style>
     
     <!-- Vue 3 via CDN -->
@@ -272,6 +295,43 @@
         layoutApp.mount('#navbar-app');
     </script>
     
+    <!-- Scroll Reveal script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px 0px -8% 0px", // Trigger when element is slightly inside viewport
+                threshold: 0.02
+            };
+
+            const revealCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = entry.target.getAttribute("data-reveal-delay") || 0;
+                        setTimeout(() => {
+                            entry.target.classList.add("revealed");
+                        }, parseInt(delay));
+                        observer.unobserve(entry.target);
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(revealCallback, observerOptions);
+            
+            // Function to query and observe all reveal elements
+            const observeElements = () => {
+                const revealElements = document.querySelectorAll(".reveal-clip, .reveal-clip-right");
+                revealElements.forEach(el => {
+                    if (!el.classList.contains("revealed")) {
+                        observer.observe(el);
+                    }
+                });
+            };
+
+            observeElements();
+        });
+    </script>
+
     <!-- Specific page Vue apps can be mounted in this block -->
     {% block extra_scripts %}{% endblock %}
 
