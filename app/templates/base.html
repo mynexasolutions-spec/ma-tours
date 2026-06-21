@@ -8,6 +8,10 @@
     <title>{% block title %}M A Tours & Travels{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Discover amazing travel packages with M A Tours & Travels. Domestic, international, honeymoon, family, and group tours.{% endblock %}">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='logo-svg.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ url_for('static', filename='logo-transparent.png') }}">
+
     <!-- Tailwind CSS v4 (CDN for development) -->
     <script src="https://cdn.tailwindcss.com"></script>
 
