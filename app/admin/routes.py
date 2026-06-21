@@ -379,7 +379,7 @@ def packages_edit(id):
         return redirect(url_for('admin.packages_list'))
 
     return render_template('admin/packages/edit.html', package=package,
-                           destinations=destinations, travel_styles=travel_styles)
+                           destinations=destinations, travel_styles=travel_styles, activities=activities)
 
 
 @admin_bp.route('/packages/<string:id>/toggle', methods=['POST'])
