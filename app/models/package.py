@@ -64,6 +64,12 @@ class Package(db.Model):
     faqs = db.relationship('FAQ', backref='package', lazy='dynamic', cascade='all, delete-orphan')
     testimonials = db.relationship('Testimonial', backref='package', lazy='dynamic', cascade='all, delete-orphan')
 
+    @property
+    def hero_image_url(self):
+        """Returns the first image URL associated with the package, or None."""
+        first_image = self.images.first()
+        return first_image.image_url if first_image else None
+
     def __repr__(self):
         return f'<Package {self.title}>'
 
