@@ -145,7 +145,7 @@
                 <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{{ package.overview }}</p>
                 <div class="border-t border-gray-100 pt-4 flex justify-between items-center mt-auto">
                     <div class="text-gray-500 text-sm">Starts from</div>
-                    <div class="font-bold text-lg text-primary-600">₹{{ "{:,.0f}".format(package.price) if package.price
+                    <div class="font-bold text-lg text-primary-600">₹{{ "{:,.0f}".format(package.price_from) if package.price_from
                         else 'Custom' }}</div>
                 </div>
             </div>
