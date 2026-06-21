@@ -25,14 +25,7 @@
         {% if active_acts|length > 0 %}
             {% set has_content = true %}
             <div id="{{ category.slug }}" class="scroll-mt-24">
-                <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
-                    {% if category.image_url %}
-                    <img src="{{ category.image_url }}" alt="{{ category.name }}" class="w-12 h-12 rounded-lg object-cover shadow-sm">
-                    {% else %}
-                    <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center text-primary-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
-                    </div>
-                    {% endif %}
+                <div class="mb-8 border-b border-gray-100 pb-4">
                     <div>
                         <h2 class="text-3xl font-serif font-bold text-gray-900">{{ category.name }}</h2>
                         {% if category.description %}
@@ -76,10 +69,7 @@
     {% if uncategorized|length > 0 %}
         {% set has_content = true %}
         <div id="general" class="scroll-mt-24">
-            <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
-                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-                </div>
+            <div class="mb-8 border-b border-gray-100 pb-4">
                 <div>
                     <h2 class="text-3xl font-serif font-bold text-gray-900">Other Experiences</h2>
                 </div>
